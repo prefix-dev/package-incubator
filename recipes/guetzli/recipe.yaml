@@ -12,23 +12,24 @@ source:
     target_directory: test-image
     sha256: 2c1784bf4efb90c57f00a3ab4898ac8ec4784c60d7a0f70d2ba2c00af910520b
 
+build:
+  skip: win
+  script:
+    - make
+    - install -Dm755 bin/Release/guetzli $PREFIX/bin/guetzli
 
 requirements:
   build:
     - ${{ compiler('cxx') }}
     - make
     - pkg-config
+    - coreutils
   host:
     - libpng
     - zlib
   ignore_run_exports:
-    from_package: 
+    from_package:
       - zlib
-
-build:
-  script: |
-    make
-    install -Dm755 bin/Release/guetzli $PREFIX/bin/guetzli
 
 tests:
   - script:
