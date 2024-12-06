@@ -44,7 +44,7 @@ jobs:
       - name: Run code in changed subdirectories
         shell: bash
         run: |
-          rattler-build build --recipe-dir . \
+          rattler-build build --recipe-dir ./recipes \
             --skip-existing=all --target-platform=${{ matrix.target }} \
             -c https://prefix.dev/prefix-package-incubator -c conda-forge
 
