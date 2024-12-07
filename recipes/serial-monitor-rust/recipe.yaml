@@ -12,11 +12,11 @@ source:
 build:
   script: |
     
-    if [[ $(uname) == "Darwin" ]]; then     
+    if [[ "$OSTYPE" == "darwin"* ]]; then  # macOS
       cargo install cargo-bundle
       cargo bundle --release
 
-    elif [[ $(uname) == "Linux" ]]; then     
+    elif [[ "$OSTYPE" == "linux-gnu"* ]]; then  # Linux
       sudo apt-get update
       sudo apt-get install -y \
         libclang-dev libgtk-3-dev libxcb-render0-dev libxcb-shape0-dev \
@@ -24,7 +24,7 @@ build:
       cargo install cargo-bundle
       cargo bundle --release
 
-    elif [[ $(uname) == "Windows" ]]; then
+    elif [[ "$OSTYPE" == "cygwin" || "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then  # Windows (Cygwin/MSYS)
       cargo install cargo-wix
       cargo wix
     fi
