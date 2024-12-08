@@ -1,0 +1,21 @@
+c_stdlib:
+  - if: linux
+    then:
+      - sysroot
+  - if: osx
+    then:
+      - macosx_deployment_target
+  - if: win
+    then:
+      - vs
+
+c_compiler:
+  - if: linux
+    then:
+      - gcc
+  - if: osx
+    then:
+      - clang
+  - if: win
+    then:
+      - vs
