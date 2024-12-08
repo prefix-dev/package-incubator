@@ -1,0 +1,45 @@
+context:
+  version: "0.3.1"
+
+package:
+  name: serial-monitor-rust
+  version: ${{ version }}
+
+source:
+  - url: https://github.com/hacknus/serial-monitor-rust/archive/refs/tags/v${{ version }}.tar.gz
+    sha256: 3044e9a19c72efb240742f8a319f83b29efe3f9d2126dab9e3240e7609171079
+
+build:
+  script: |
+    
+    if [[ "$OSTYPE" == "darwin"* ]]; then  # macOS
+      cargo install cargo-bundle
+      cargo bundle --release
+
+    elif [[ "$OSTYPE" == "linux-gnu"* ]]; then  # Linux
+      sudo apt-get update
+      sudo apt-get install -y \
+        libclang-dev libgtk-3-dev libxcb-render0-dev libxcb-shape0-dev \
+        libxcb-xfixes0-dev libxkbcommon-dev libssl-dev libudev-dev
+      cargo install cargo-bundle
+      cargo bundle --release
+
+    elif [[ "$OSTYPE" == "cygwin" || "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then  # Windows (Cygwin/MSYS)
+      cargo install cargo-wix
+      cargo wix
+    fi
+
+
+requirements:
+  host:
+    - rust
+  run:
+    - rust
+
+about:
+  repository: https://github.com/hacknus/serial-monitor-rust
+  license: GPL-3.0
+  summary: A cross-platform serial monitor/plotter written entirely in rust.
+extra:
+  recipe-maintainers:
+    - hacknus
