@@ -43,7 +43,7 @@ jobs:
 
       - name: Run code in changed subdirectories
         shell: bash
-        run: pixi build-all
+        run: pixi run build-all
 
       - name: Upload all packages
         shell: bash
