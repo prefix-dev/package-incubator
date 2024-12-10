@@ -23,7 +23,7 @@ build:
         - cargo install --bins --root ${PREFIX} --path .
     - if: linux
       then:
-        - conda install -c conda-forge libclang libgtk-3 libxcb libxkbcommon openssl libudev -y
+        - conda install -c conda-forge libclang conda-forge::gtk3 conda-forge::libxcb conda-forge::libxkbcommon conda-forge::openssl conda-forge::libudev -y
         - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
         - cargo install --bins --root ${PREFIX} --path .
     - if: win
