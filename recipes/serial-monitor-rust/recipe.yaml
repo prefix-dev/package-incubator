@@ -1,5 +1,5 @@
 context:
-  version: "0.3.1"
+  version: "0.3.2"
 
 package:
   name: serial-monitor-rust
@@ -7,28 +7,28 @@ package:
 
 source:
   - url: https://github.com/hacknus/serial-monitor-rust/archive/refs/tags/v${{ version }}.tar.gz
-    sha256: 3044e9a19c72efb240742f8a319f83b29efe3f9d2126dab9e3240e7609171079
+    sha256: 7d9e7f19f3dc86f74852dd0129dcb31feb08a3411269d337dba3463a4f479f01
 
 build:
-  script: |
-    
-    if [[ "$OSTYPE" == "darwin"* ]]; then  # macOS
-      cargo install cargo-bundle
-      cargo bundle --release
-
-    elif [[ "$OSTYPE" == "linux-gnu"* ]]; then  # Linux
-      sudo apt-get update
-      sudo apt-get install -y \
-        libclang-dev libgtk-3-dev libxcb-render0-dev libxcb-shape0-dev \
-        libxcb-xfixes0-dev libxkbcommon-dev libssl-dev libudev-dev
-      cargo install cargo-bundle
-      cargo bundle --release
-
-    elif [[ "$OSTYPE" == "cygwin" || "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then  # Windows (Cygwin/MSYS)
-      cargo install cargo-wix
-      cargo wix
-    fi
-
+  - if: platform == "osx"
+    then:
+      script: |
+        cargo install cargo-bundle
+        cargo bundle --release
+  - if: platform == "linux"
+    then:
+      script: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          libclang-dev libgtk-3-dev libxcb-render0-dev libxcb-shape0-dev \
+          libxcb-xfixes0-dev libxkbcommon-dev libssl-dev libudev-dev
+        cargo install cargo-bundle
+        cargo bundle --release
+  - if: platform == "win"
+    then:
+      script: |
+        cargo install cargo-wix
+        cargo wix
 
 requirements:
   host:
