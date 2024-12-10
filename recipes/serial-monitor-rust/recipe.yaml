@@ -33,7 +33,8 @@ build:
         - cargo install --locked --bins --root ${PREFIX} --path .
     - if: win
       then:
-        - rustup update
+        - Invoke-WebRequest -Uri https://sh.rustup.rs -OutFile rustup-init.exe; ./rustup-init.exe -y
+        - rustc --version
         - rustup show
         - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
         - cargo install --locked --bins --root ${PREFIX} --path . --verbose
