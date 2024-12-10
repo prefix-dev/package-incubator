@@ -16,23 +16,21 @@ build:
     - if: osx
       then:
         - export MACOSX_DEPLOYMENT_TARGET=10.15  # or the correct macOS version
-        - export CC=/usr/bin/clang
-        - export CXX=/usr/bin/clang++
-        - clang -v
-        - conda install -c conda-forge clang=15
-        - clang -v
+        - export PATH="/usr/bin:$PATH"  # Ensure that system Clang is used, not a potentially conflicting Homebrew version
         - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
         - cargo install --locked --bins --root ${PREFIX} --path .
     - if: linux
       then:
-        - conda install -c conda-forge libclang conda-forge::gtk3 conda-forge::libxcb conda-forge::libxkbcommon conda-forge::openssl conda-forge::libudev1 conda-forge::libudev -y
+        - conda install conda-forge::libclang conda-forge::gtk3 conda-forge::libxcb conda-forge::libxkbcommon conda-forge::openssl conda-forge::libudev1 conda-forge::libudev -y
         - conda list libudev
+        - conda install -c conda-forge pkg-config
         - pkg-config --cflags --libs libudev
         - export PKG_CONFIG_PATH=$CONDA_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH
         - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
         - cargo install --locked --bins --root ${PREFIX} --path .
     - if: win
       then:
+        - rustup default stable-x86_64-pc-windows-msvc
         - Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem' -Name LongPathsEnabled -Value 1
         - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
         - cargo install --locked --bins --root ${PREFIX} --path . --verbose
@@ -40,6 +38,8 @@ build:
 requirements:
   host:
     - ${{ compiler('rust') }}
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
     - cargo-bundle-licenses
 
   run:
