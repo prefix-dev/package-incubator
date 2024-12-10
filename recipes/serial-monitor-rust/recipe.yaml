@@ -36,6 +36,7 @@ build:
         - curl -o rustup-init.sh https://sh.rustup.rs
         - sh rustup-init.sh -y
         - rustc --version
+        - set PATH=%USERPROFILE%\.cargo\bin;%PATH%
         - rustup show
         - rustup update
         - rustc --version
