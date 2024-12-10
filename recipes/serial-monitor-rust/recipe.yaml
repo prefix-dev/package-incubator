@@ -21,17 +21,17 @@ build:
         - cargo install --locked --bins --root ${PREFIX} --path .
     - if: linux
       then:
-        - conda install conda-forge::libclang conda-forge::gtk3 conda-forge::libxcb conda-forge::libxkbcommon conda-forge::openssl conda-forge::libudev1 conda-forge::libudev -y
+        - conda install conda-forge::libclang conda-forge::gtk3 conda-forge::libxcb conda-forge::libxkbcommon conda-forge::openssl conda-forge::libudev -y
         - conda list libudev
         - conda install -c conda-forge pkg-config
+        - ls $CONDA_PREFIX/lib/pkgconfig/libudev.pc
         - pkg-config --cflags --libs libudev
         - export PKG_CONFIG_PATH=$CONDA_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH
         - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
         - cargo install --locked --bins --root ${PREFIX} --path .
     - if: win
       then:
-        - rustup default stable-x86_64-pc-windows-msvc
-        - Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem' -Name LongPathsEnabled -Value 1
+        - rustup show
         - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
         - cargo install --locked --bins --root ${PREFIX} --path . --verbose
 
