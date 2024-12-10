@@ -10,31 +10,46 @@ source:
     sha256: 7d9e7f19f3dc86f74852dd0129dcb31feb08a3411269d337dba3463a4f479f01
 
 build:
-  - if: platform == "osx"
-    then:
-      script: |
-        cargo install cargo-bundle
-        cargo bundle --release
-  - if: platform == "linux"
-    then:
-      script: |
-        sudo apt-get update
-        sudo apt-get install -y \
-          libclang-dev libgtk-3-dev libxcb-render0-dev libxcb-shape0-dev \
-          libxcb-xfixes0-dev libxkbcommon-dev libssl-dev libudev-dev
-        cargo install cargo-bundle
-        cargo bundle --release
-  - if: platform == "win"
-    then:
-      script: |
-        cargo install cargo-wix
-        cargo wix
+  # build numbers can be set arbitrarily
+  number: 0
+  script:
+    - if: osx
+      then:
+        - clang --version
+        - export MACOSX_DEPLOYMENT_TARGET=10.15  # or the correct macOS version
+        - export CC=/usr/bin/clang
+        - export CXX=/usr/bin/clang++
+        - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
+        - cargo install --locked --bins --root ${PREFIX} --path .
+    - if: linux
+      then:
+        - conda install -c conda-forge \
+          libclang libgtk-3 libxcb libxkbcommon openssl libudev -y
+        - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
+        - cargo install --locked --bins --root ${PREFIX} --path .
+    - if: win
+      then:
+        - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
+        - cargo install --locked --bins --root ${PREFIX} --path .
 
 requirements:
   host:
-    - rust
+    - ${{ compiler('rust') }}
+    - cargo-bundle-licenses
+    - if: linux
+      then:
+        - libclang         # Conda Forge provides Rust-compatible libclang
+        - libgtk-3         # GTK3 for Linux GUI
+        - openssl          # OpenSSL for secure connections
+        - libudev          # Udev for Linux devices
+
   run:
-    - rust
+    - if: linux
+      then:
+        - libclang
+        - libgtk-3
+        - openssl
+        - libudev
 
 about:
   repository: https://github.com/hacknus/serial-monitor-rust
