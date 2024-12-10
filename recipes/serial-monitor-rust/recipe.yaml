@@ -33,7 +33,7 @@ build:
         - cargo install --locked --bins --root ${PREFIX} --path .
     - if: win
       then:
-        - curl -sSf https://sh.rustup.rs | sh
+        - curl -sSf https://sh.rustup.rs | sh -y
         - rustc --version
         - rustup show
         - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
