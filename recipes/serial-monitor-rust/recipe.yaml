@@ -15,41 +15,29 @@ build:
   script:
     - if: osx
       then:
-        - clang --version
+        - export PATH="/usr/bin:$PATH"  # Ensure that system Clang is used, not a potentially conflicting Homebrew version
         - export MACOSX_DEPLOYMENT_TARGET=10.15  # or the correct macOS version
         - export CC=/usr/bin/clang
         - export CXX=/usr/bin/clang++
         - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
-        - cargo install --locked --bins --root ${PREFIX} --path .
+        - cargo install --bins --root ${PREFIX} --path .
     - if: linux
       then:
         - conda install -c conda-forge \
           libclang libgtk-3 libxcb libxkbcommon openssl libudev -y
         - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
-        - cargo install --locked --bins --root ${PREFIX} --path .
+        - cargo install --bins --root ${PREFIX} --path .
     - if: win
       then:
         - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
-        - cargo install --locked --bins --root ${PREFIX} --path .
+        - cargo install --bins --root ${PREFIX} --path .
 
 requirements:
   host:
     - ${{ compiler('rust') }}
     - cargo-bundle-licenses
-    - if: linux
-      then:
-        - libclang         # Conda Forge provides Rust-compatible libclang
-        - libgtk-3         # GTK3 for Linux GUI
-        - openssl          # OpenSSL for secure connections
-        - libudev          # Udev for Linux devices
 
   run:
-    - if: linux
-      then:
-        - libclang
-        - libgtk-3
-        - openssl
-        - libudev
 
 about:
   repository: https://github.com/hacknus/serial-monitor-rust
