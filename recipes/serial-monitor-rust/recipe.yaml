@@ -13,6 +13,8 @@ build:
   # build numbers can be set arbitrarily
   number: 0
   script:
+    - rustc --version
+    - cargo --version
     - if: osx
       then:
         - export MACOSX_DEPLOYMENT_TARGET=10.15  # or the correct macOS version
@@ -31,8 +33,6 @@ build:
         - cargo install --locked --bins --root ${PREFIX} --path .
     - if: win
       then:
-        - rustc --version
-        - cargo --version
         - rustup update
         - rustup show
         - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
