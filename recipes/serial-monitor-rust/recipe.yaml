@@ -33,9 +33,9 @@ build:
         - cargo install --locked --bins --root ${PREFIX} --path .
     - if: win
       then:
-        - curl -o rustup-init.sh https://sh.rustup.rs
-        - sh rustup-init.sh -y
+        - conda install conda-forge::rust -y
         - rustc --version
+        - cargo --version
         - rustup show
         - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
         - cargo install --locked --bins --root ${PREFIX} --path . --verbose
