@@ -26,9 +26,9 @@ build:
         - conda install conda-forge::libclang conda-forge::gtk3 conda-forge::libxcb conda-forge::libxkbcommon conda-forge::openssl conda-forge::libudev -y
         - conda list libudev
         - conda install -c conda-forge pkg-config
-        - ls $CONDA_PREFIX/lib/pkgconfig/libudev.pc
+        - export PKG_CONFIG_PATH=$BUILD_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH
+        - ls $BUILD_PREFIX/lib/pkgconfig/libudev.pc
         - pkg-config --cflags --libs libudev
-        - export PKG_CONFIG_PATH=$CONDA_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH
         - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
         - cargo install --locked --bins --root ${PREFIX} --path .
     - if: win
