@@ -1,13 +1,13 @@
 context:
-  version: "0.3.2"
+  version: "0.3.1"
 
 package:
   name: serial-monitor-rust
   version: ${{ version }}
 
 source:
-  - url: https://github.com/hacknus/serial-monitor-rust/archive/refs/tags/v${{ version }}.tar.gz
-    sha256: 7d9e7f19f3dc86f74852dd0129dcb31feb08a3411269d337dba3463a4f479f01
+  url: https://github.com/hacknus/serial-monitor-rust/archive/refs/tags/v${{ version }}.tar.gz
+  sha256: 3044e9a19c72efb240742f8a319f83b29efe3f9d2126dab9e3240e7609171079
 
 build:
   # build numbers can be set arbitrarily
