@@ -1,13 +1,13 @@
 context:
-  version: "0.3.0"
+  version: "0.3.2"
 
 package:
   name: serial-monitor-rust
   version: ${{ version }}
 
 source:
-  url: https://github.com/hacknus/serial-monitor-rust/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: ed5382c75d97fd05c8bc95a8b17de12a023fabbe88d7794c05d8ef79ee3a1096
+  - url: https://github.com/hacknus/serial-monitor-rust/archive/refs/tags/v${{ version }}.tar.gz
+    sha256: 7d9e7f19f3dc86f74852dd0129dcb31feb08a3411269d337dba3463a4f479f01
 
 build:
   # build numbers can be set arbitrarily
@@ -34,6 +34,10 @@ build:
         - cargo install --locked --bins --root ${PREFIX} --path . --verbose
 
 requirements:
+  build:
+    - if: win
+      then:
+        rust=1.83
   host:
     - ${{ compiler('rust') }}
     - ${{ compiler('c') }}
@@ -50,7 +54,7 @@ requirements:
         - conda-forge::libudev
     - if: win
       then:
-        rust
+        rust=1.83
 
   run:
     - if: linux
