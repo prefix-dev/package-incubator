@@ -37,7 +37,7 @@ requirements:
   build:
     - if: win
       then:
-        rust=1.83
+        rust=1.82
   host:
     - ${{ compiler('rust') }}
     - ${{ compiler('c') }}
@@ -54,7 +54,7 @@ requirements:
         - conda-forge::libudev
     - if: win
       then:
-        rust=1.83
+        rust=1.82
 
   run:
     - if: linux
