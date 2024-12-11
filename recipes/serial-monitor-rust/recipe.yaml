@@ -28,15 +28,17 @@ build:
         - cargo install --locked --bins --root ${PREFIX} --path .
     - if: win
       then:
-        - rustup default stable-x86_64-pc-windows-gnu
         - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
         - cargo install --locked --bins --root ${PREFIX} --path . --verbose
 
 requirements:
   build:
-    - if: win
-      then:
-        rust=1.82
+    - ${{ compiler('rust') }}
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
+    - cargo-bundle-licenses
+    - pkg-config
+
   host:
     - ${{ compiler('rust') }}
     - ${{ compiler('c') }}
