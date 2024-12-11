@@ -23,9 +23,6 @@ build:
         - cargo install --locked --bins --root ${PREFIX} --path .
     - if: linux
       then:
-        - conda install conda-forge::libclang conda-forge::gtk3 conda-forge::libxcb conda-forge::libxkbcommon conda-forge::openssl conda-forge::libudev -y
-        - conda list libudev
-        - conda install -c conda-forge pkg-config
         - export PKG_CONFIG_PATH=$BUILD_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH
         - ls $BUILD_PREFIX/lib/pkgconfig/libudev.pc
         - pkg-config --cflags --libs libudev
@@ -47,9 +44,26 @@ requirements:
     - ${{ compiler('cxx') }}
     - cargo-bundle-licenses
     - pkg-config
+    - if: linux
+      then:
+        libclang
+        gtk3
+        libxcb
+        libxkbcommon
+        openssl
+        libudev
+    - if: win
+      then:
+        rust
+
   run:
     - if: linux
       then:
+        libclang
+        gtk3
+        libxcb
+        libxkbcommon
+        openssl
         libudev
 
 about:
