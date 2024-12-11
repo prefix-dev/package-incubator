@@ -46,12 +46,12 @@ requirements:
     - pkg-config
     - if: linux
       then:
-        libclang
-        gtk3
-        libxcb
-        libxkbcommon
-        openssl
-        libudev
+        - conda-forge::libclang
+        - conda-forge::gtk3
+        - conda-forge::libxcb
+        - conda-forge::libxkbcommon
+        - conda-forge::openssl
+        - conda-forge::libudev
     - if: win
       then:
         rust
@@ -59,12 +59,12 @@ requirements:
   run:
     - if: linux
       then:
-        libclang
-        gtk3
-        libxcb
-        libxkbcommon
-        openssl
-        libudev
+        - conda-forge::libclang
+        - conda-forge::gtk3
+        - conda-forge::libxcb
+        - conda-forge::libxkbcommon
+        - conda-forge::openssl
+        - conda-forge::libudev
 
 about:
   repository: https://github.com/hacknus/serial-monitor-rust
