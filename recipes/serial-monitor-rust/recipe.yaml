@@ -23,7 +23,6 @@ build:
         - cargo install --locked --bins --root ${PREFIX} --path .
     - if: linux
       then:
-        - conda list --prefix $BUILD_PREFIX || conda create --prefix $BUILD_PREFIX --yes
         - conda install conda-forge::libclang conda-forge::gtk3 conda-forge::libxcb conda-forge::libxkbcommon conda-forge::openssl conda-forge::libudev -y
         - conda list libudev
         - conda install -c conda-forge pkg-config
@@ -43,11 +42,11 @@ build:
 
 requirements:
   build:
+    - cargo-bundle-licenses
+  host:
     - ${{ compiler('rust') }}
     - ${{ compiler('c') }}
     - ${{ compiler('cxx') }}
-    - cargo-bundle-licenses
-  host:
     - pkg-config
   run:
     - if: linux
