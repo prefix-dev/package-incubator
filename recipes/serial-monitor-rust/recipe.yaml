@@ -10,30 +10,19 @@ source:
     sha256: 7d9e7f19f3dc86f74852dd0129dcb31feb08a3411269d337dba3463a4f479f01
 
 build:
-  # build numbers can be set arbitrarily
   number: 0
   script:
     # display the rust version
     - rustc --version
     - cargo --version
-    - if: osx
-      then:
-        - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
-        - cargo install --locked --bins --root ${PREFIX} --path .
-    - if: linux
-      then:
-        - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
-        - cargo install --locked --bins --root ${PREFIX} --path .
-    - if: win
-      then:
-        - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
-        - cargo install --locked --bins --root ${PREFIX} --path . --verbose
+    - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
+    - cargo install --locked --bins --root ${PREFIX} --path .
 
 requirements:
   build:
     - if: win
       then:
-        - rust=1.82
+        - rust=1.82  # required on windows explicitly, on macOS and linux the latest version is already installed
 
   host:
     - cargo-bundle-licenses
@@ -43,6 +32,7 @@ requirements:
         - ${{ compiler('rust') }}
         - ${{ compiler('c') }}
         - ${{ compiler('cxx') }}
+        # for egui, linux requires additional dependencies
         - conda-forge::libclang
         - conda-forge::gtk3
         - conda-forge::libxcb
@@ -50,10 +40,10 @@ requirements:
         - conda-forge::openssl
         - conda-forge::libudev
 
-
   run:
     - if: linux
       then:
+        # for egui, linux requires additional dependencies
         - conda-forge::libclang
         - conda-forge::gtk3
         - conda-forge::libxcb
