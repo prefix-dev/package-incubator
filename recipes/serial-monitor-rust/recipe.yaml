@@ -15,6 +15,9 @@ build:
     # display the rust version
     - rustc --version
     - cargo --version
+    - if: osx
+      then:
+        - export MACOSX_DEPLOYMENT_TARGET=10.15  # minimum os version
     - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
     - cargo install --locked --bins --root ${PREFIX} --path .
 
