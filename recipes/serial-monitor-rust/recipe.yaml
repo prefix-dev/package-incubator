@@ -43,10 +43,16 @@ build:
 requirements:
   build:
     - ${{ compiler('rust') }}
+    - ${{ stdlib('c') }}
     - ${{ compiler('c') }}
     - ${{ compiler('cxx') }}
     - cargo-bundle-licenses
+  host:
+    - pkg-config
   run:
+    - if: linux
+      then:
+        libudev
 
 about:
   repository: https://github.com/hacknus/serial-monitor-rust
