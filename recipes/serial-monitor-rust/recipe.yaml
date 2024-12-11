@@ -34,10 +34,6 @@ requirements:
     - if: win
       then:
         - rust=1.82
-    - if: osx
-      then:
-        - rust=1.82
-        - clang=15.0.0
 
   host:
     - cargo-bundle-licenses
