@@ -9,4 +9,4 @@ MACOSX_DEPLOYEMENT_TARGET:
 c_compiler_version:
   - if: osx
     then:
-      - 18
+      - 19

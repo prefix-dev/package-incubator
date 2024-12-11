@@ -1,6 +1,7 @@
 context:
   name: keepawake-rs
   version: "0.5.1"
+  c_compiler_version: 19
 
 package:
   name: ${{ name|lower }}
