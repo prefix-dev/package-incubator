@@ -41,12 +41,11 @@ build:
         - cargo install --locked --bins --root ${PREFIX} --path . --verbose
 
 requirements:
-  host:
+  build:
     - ${{ compiler('rust') }}
     - ${{ compiler('c') }}
     - ${{ compiler('cxx') }}
     - cargo-bundle-licenses
-
   run:
 
 about:
