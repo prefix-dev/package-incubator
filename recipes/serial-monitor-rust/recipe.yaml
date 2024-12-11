@@ -33,34 +33,29 @@ build:
 
 requirements:
   build:
-    - ${{ compiler('rust') }}
-    - ${{ compiler('c') }}
-    - ${{ compiler('cxx') }}
-    - cargo-bundle-licenses
-    - pkg-config
     - if: win
       then:
-        - vs_win-64=2022.12
         - rust=1.82
 
   host:
-    - ${{ compiler('rust') }}
-    - ${{ compiler('c') }}
-    - ${{ compiler('cxx') }}
     - cargo-bundle-licenses
     - pkg-config
     - if: linux
       then:
+        - ${{ compiler('rust') }}
+        - ${{ compiler('c') }}
+        - ${{ compiler('cxx') }}
         - conda-forge::libclang
         - conda-forge::gtk3
         - conda-forge::libxcb
         - conda-forge::libxkbcommon
         - conda-forge::openssl
         - conda-forge::libudev
-    - if: win
+    - if: osx
       then:
-        - vs_win-64=2022.12
-        - rust=1.82
+        - ${{ compiler('rust') }}
+        - ${{ compiler('c') }}
+        - ${{ compiler('cxx') }}
 
   run:
     - if: linux
