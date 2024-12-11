@@ -6,4 +6,7 @@ MACOSX_DEPLOYEMENT_TARGET:
   - if: osx
     then:
       - 10.13
-
+c_compiler_version:
+  - if: osx
+    then:
+      - 18
