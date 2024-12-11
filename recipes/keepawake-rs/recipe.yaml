@@ -23,7 +23,9 @@ requirements:
     - ${{ stdlib("c") }}
     - ${{ compiler('rust') }}
     - cargo-bundle-licenses
-    - libclang ${{ c_compiler_version }}.*
+    - if: osx
+      then:
+        - libclang ${{ c_compiler_version }}.*
   host:
     - setuptools-rust
 
