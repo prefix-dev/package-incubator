@@ -33,13 +33,10 @@ build:
         - cargo install --locked --bins --root ${PREFIX} --path .
     - if: win
       then:
-        - curl -o rustup-init.sh https://sh.rustup.rs
-        - sh rustup-init.sh -y
-        - set PATH=%USERPROFILE%\.cargo\bin;%PATH%
-        - link --help
-        - set PATH=C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\<version>\bin\Hostx64\x64;%PATH%
-        - set LIB=C:\Program Files (x86)\Windows Kits\10\Lib\10.0.14393.0\um\x64\;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\<version>\lib\x64\;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.14393.0\ucrt\x64\;%LIB%
-        - set CARGO_BUILD_TARGET=x86_64-pc-windows-msvc
+        - where conda
+        - conda --version || echo "Conda not found, check environment setup."
+        - conda install conda-forge::rust -y
+        - rustc --version
         - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
         - cargo install --locked --bins --root ${PREFIX} --path . --verbose
 
