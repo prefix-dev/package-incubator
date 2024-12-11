@@ -38,6 +38,9 @@ requirements:
     - ${{ compiler('cxx') }}
     - cargo-bundle-licenses
     - pkg-config
+    - if: win
+      then:
+        rust=1.82
 
   host:
     - ${{ compiler('rust') }}
