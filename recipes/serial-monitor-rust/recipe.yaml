@@ -40,7 +40,8 @@ requirements:
     - pkg-config
     - if: win
       then:
-        rust=1.82
+        - vs_win-64=2022.12
+        - rust=1.82
 
   host:
     - ${{ compiler('rust') }}
@@ -56,6 +57,10 @@ requirements:
         - conda-forge::libxkbcommon
         - conda-forge::openssl
         - conda-forge::libudev
+    - if: win
+      then:
+        - vs_win-64=2022.12
+        - rust=1.82
 
   run:
     - if: linux
