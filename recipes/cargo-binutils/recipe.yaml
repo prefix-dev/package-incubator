@@ -20,25 +20,47 @@ requirements:
 tests:
   - package_contents:
       files:
-        - bin/cargo-cov${{ ".exe" if win}}
-        - bin/cargo-nm${{ ".exe" if win}}
-        - bin/cargo-objcopy${{ ".exe" if win}}
-        - bin/cargo-objdump${{ ".exe" if win}}
-        - bin/cargo-profdata${{ ".exe" if win}}
-        - bin/cargo-readobj${{ ".exe" if win}}
-        - bin/cargo-size${{ ".exe" if win}}
-        - bin/cargo-strip${{ ".exe" if win}}
-        - bin/rust-ar${{ ".exe" if win}}
-        - bin/rust-cov${{ ".exe" if win}}
-        - bin/rust-ld${{ ".exe" if win}}
-        - bin/rust-lld${{ ".exe" if win}}
-        - bin/rust-nm${{ ".exe" if win}}
-        - bin/rust-objcopy${{ ".exe" if win}}
-        - bin/rust-objdump${{ ".exe" if win}}
-        - bin/rust-profdata${{ ".exe" if win}}
-        - bin/rust-readobj${{ ".exe" if win}}
-        - bin/rust-size${{ ".exe" if win}}
-        - bin/rust-strip${{ ".exe" if win}}
+        - if: unix
+          then:
+            - bin/cargo-cov
+            - bin/cargo-nm
+            - bin/cargo-objcopy
+            - bin/cargo-objdump
+            - bin/cargo-profdata
+            - bin/cargo-readobj
+            - bin/cargo-size
+            - bin/cargo-strip
+            - bin/rust-ar
+            - bin/rust-cov
+            - bin/rust-ld
+            - bin/rust-lld
+            - bin/rust-nm
+            - bin/rust-objcopy
+            - bin/rust-objdump
+            - bin/rust-profdata
+            - bin/rust-readobj
+            - bin/rust-size
+            - bin/rust-strip
+          else:
+            - bin/cargo-cov.exe
+            - bin/cargo-nm.exe
+            - bin/cargo-objcopy.exe
+            - bin/cargo-objdump.exe
+            - bin/cargo-profdata.exe
+            - bin/cargo-readobj.exe
+            - bin/cargo-size.exe
+            - bin/cargo-strip.exe
+            - bin/rust-ar.exe
+            - bin/rust-cov.exe
+            - bin/rust-ld.exe
+            - bin/rust-lld.exe
+            - bin/rust-nm.exe
+            - bin/rust-objcopy.exe
+            - bin/rust-objdump.exe
+            - bin/rust-profdata.exe
+            - bin/rust-readobj.exe
+            - bin/rust-size.exe
+            - bin/rust-strip.exe
   - script:
       - if: unix
         then:
