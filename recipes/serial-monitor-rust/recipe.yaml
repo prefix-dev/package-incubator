@@ -64,7 +64,8 @@ tests:
           then:
             bin/serial-monitor-rust
           else:
-            bin/serial-monitor-rust.exe
+            - ls bin
+            - bin/serial-monitor-rust.exe
 
 about:
   repository: https://github.com/hacknus/serial-monitor-rust
