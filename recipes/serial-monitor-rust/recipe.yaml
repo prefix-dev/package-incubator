@@ -41,11 +41,13 @@ tests:
           then:
             - bin/serial-monitor-rust.exe
   - script:
-      - if: linux or osx
-        then:
-          - serial-monitor-rust --help
-        else:
-          - serial-monitor-rust.exe --help
+      - echo "No tests for GUI applications"
+      # Better not test the GUI as it fails on linux (no DISPLAY) and hangs on osx
+      #- if: linux or osx
+      #  then:
+      #    - serial-monitor-rust --help
+      #  else:
+      #    - serial-monitor-rust.exe --help
 
 
 about:
