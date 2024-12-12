@@ -54,6 +54,15 @@ requirements:
         - conda-forge::openssl
         - conda-forge::libudev
 
+tests:
+  - package_contents:
+      files:
+        - if: unix
+          then:
+            bin/serial-monitor-rust
+          else:
+            bin/serial-monitor-rust.exe
+
 about:
   repository: https://github.com/hacknus/serial-monitor-rust
   license: GPL-3.0
