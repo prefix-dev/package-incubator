@@ -32,8 +32,21 @@ requirements:
       - libudev
 
 tests:
+  - package_contents:
+      files:
+        - if: linux or osx
+          then:
+            - bin/serial-monitor-rust
+        - if: win
+          then:
+            - bin/serial-monitor-rust.exe
   - script:
-      - echo "No tests"
+      - if: linux or osx
+        then:
+          - serial-monitor-rust --help
+        else:
+          - serial-monitor-rust.exe --help
+
 
 about:
   homepage: https://github.com/hacknus/serial-monitor-rust
