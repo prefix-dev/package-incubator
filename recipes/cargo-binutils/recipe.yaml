@@ -42,25 +42,25 @@ tests:
             - bin/rust-size
             - bin/rust-strip
           else:
-            - bin/cargo-cov.exe
-            - bin/cargo-nm.exe
-            - bin/cargo-objcopy.exe
-            - bin/cargo-objdump.exe
-            - bin/cargo-profdata.exe
-            - bin/cargo-readobj.exe
-            - bin/cargo-size.exe
-            - bin/cargo-strip.exe
-            - bin/rust-ar.exe
-            - bin/rust-cov.exe
-            - bin/rust-ld.exe
-            - bin/rust-lld.exe
-            - bin/rust-nm.exe
-            - bin/rust-objcopy.exe
-            - bin/rust-objdump.exe
-            - bin/rust-profdata.exe
-            - bin/rust-readobj.exe
-            - bin/rust-size.exe
-            - bin/rust-strip.exe
+            - bin\\cargo-cov.exe
+            - bin\\cargo-nm.exe
+            - bin\\cargo-objcopy.exe
+            - bin\\cargo-objdump.exe
+            - bin\\cargo-profdata.exe
+            - bin\\cargo-readobj.exe
+            - bin\\cargo-size.exe
+            - bin\\cargo-strip.exe
+            - bin\\rust-ar.exe
+            - bin\\rust-cov.exe
+            - bin\\rust-ld.exe
+            - bin\\rust-lld.exe
+            - bin\\rust-nm.exe
+            - bin\\rust-objcopy.exe
+            - bin\\rust-objdump.exe
+            - bin\\rust-profdata.exe
+            - bin\\rust-readobj.exe
+            - bin\\rust-size.exe
+            - bin\\rust-strip.exe
   - script:
       - if: unix
         then:
