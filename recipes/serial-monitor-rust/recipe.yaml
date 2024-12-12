@@ -20,6 +20,9 @@ requirements:
     - ${{ compiler('rust') }}
     - cargo-bundle-licenses
     - pkg-config
+    - if: osx
+      then:
+      - libclang ${{ c_compiler_version }}.*
   host:
     - keepawake-rs
     - setuptools-rust
