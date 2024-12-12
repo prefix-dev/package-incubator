@@ -21,6 +21,7 @@ build:
     # build and install serial-monitor-rust
     - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
     - cargo install --locked --bins --root ${PREFIX} --path .
+    - ls bin
 
 requirements:
   build:
@@ -62,11 +63,9 @@ tests:
       files:
         - if: unix
           then:
-            bin/serial-monitor-rust
+            - $PREFIX/bin/serial-monitor-rust
           else:
-            - ls bin
-            - bin/serial-monitor-rust.exe
-
+            - $PREFIX\bin\serial-monitor-rust.exe
 about:
   repository: https://github.com/hacknus/serial-monitor-rust
   license: GPL-3.0
