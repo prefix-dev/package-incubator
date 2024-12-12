@@ -1,5 +1,6 @@
 c_compiler_version:
   - if: win
-    then: 2019
+    then:
+      - 2019
 
 rust_compiler_version: 1.78
