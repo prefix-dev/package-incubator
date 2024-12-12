@@ -1,6 +1,7 @@
 context:
   name: serial-monitor-rust
   version: "0.3.2"
+  c_compiler_version: 19
 
 package:
   name: ${{ name|lower }}
