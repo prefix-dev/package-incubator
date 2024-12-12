@@ -19,48 +19,48 @@ requirements:
 
 tests:
   - package_contents:
-      files:
+      bin:
         - if: unix
           then:
-            - bin/cargo-cov
-            - bin/cargo-nm
-            - bin/cargo-objcopy
-            - bin/cargo-objdump
-            - bin/cargo-profdata
-            - bin/cargo-readobj
-            - bin/cargo-size
-            - bin/cargo-strip
-            - bin/rust-ar
-            - bin/rust-cov
-            - bin/rust-ld
-            - bin/rust-lld
-            - bin/rust-nm
-            - bin/rust-objcopy
-            - bin/rust-objdump
-            - bin/rust-profdata
-            - bin/rust-readobj
-            - bin/rust-size
-            - bin/rust-strip
+            - cargo-cov
+            - cargo-nm
+            - cargo-objcopy
+            - cargo-objdump
+            - cargo-profdata
+            - cargo-readobj
+            - cargo-size
+            - cargo-strip
+            - rust-ar
+            - rust-cov
+            - rust-ld
+            - rust-lld
+            - rust-nm
+            - rust-objcopy
+            - rust-objdump
+            - rust-profdata
+            - rust-readobj
+            - rust-size
+            - rust-strip
           else:
-            - %PREFIX%\\bin\\cargo-cov.exe
-            - %PREFIX%\\bin\\cargo-nm.exe
-            - %PREFIX%\\bin\\cargo-objcopy.exe
-            - %PREFIX%\\bin\\cargo-objdump.exe
-            - %PREFIX%\\bin\\cargo-profdata.exe
-            - %PREFIX%\\bin\\cargo-readobj.exe
-            - %PREFIX%\\bin\\cargo-size.exe
-            - %PREFIX%\\bin\\cargo-strip.exe
-            - %PREFIX%\\bin\\rust-ar.exe
-            - %PREFIX%\\bin\\rust-cov.exe
-            - %PREFIX%\\bin\\rust-ld.exe
-            - %PREFIX%\\bin\\rust-lld.exe
-            - %PREFIX%\\bin\\rust-nm.exe
-            - %PREFIX%\\bin\\rust-objcopy.exe
-            - %PREFIX%\\bin\\rust-objdump.exe
-            - %PREFIX%\\bin\\rust-profdata.exe
-            - %PREFIX%\\bin\\rust-readobj.exe
-            - %PREFIX%\\bin\\rust-size.exe
-            - %PREFIX%\\bin\\rust-strip.exe
+            - cargo-cov.exe
+            - cargo-nm.exe
+            - cargo-objcopy.exe
+            - cargo-objdump.exe
+            - cargo-profdata.exe
+            - cargo-readobj.exe
+            - cargo-size.exe
+            - cargo-strip.exe
+            - rust-ar.exe
+            - rust-cov.exe
+            - rust-ld.exe
+            - rust-lld.exe
+            - rust-nm.exe
+            - rust-objcopy.exe
+            - rust-objdump.exe
+            - rust-profdata.exe
+            - rust-readobj.exe
+            - rust-size.exe
+            - rust-strip.exe
   - script:
       - if: unix
         then:
