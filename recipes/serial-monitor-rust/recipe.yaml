@@ -1,0 +1,69 @@
+context:
+  name: serial-monitor-rust
+  version: "0.3.2"
+  c_compiler_version: 19
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://github.com/hacknus/serial-monitor-rust/archive/refs/tags/v${{ version }}.tar.gz
+  sha256: 7d9e7f19f3dc86f74852dd0129dcb31feb08a3411269d337dba3463a4f479f01
+
+build:
+  number: 0
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ stdlib("c") }}
+    - ${{ compiler('rust') }}
+    - cargo-bundle-licenses
+    - pkg-config
+    - if: osx
+      then:
+      - libclang ${{ c_compiler_version }}.*
+  host:
+    - keepawake-rs
+    - setuptools-rust
+    - if: linux
+      then:
+      - libudev
+
+tests:
+  - package_contents:
+      files:
+        - if: linux or osx
+          then:
+            - bin/serial-monitor-rust
+        - if: win
+          then:
+            - bin/serial-monitor-rust.exe
+  - script:
+      - echo "No tests for GUI applications"
+      # Better not test the GUI as it fails on linux (no DISPLAY) and hangs on osx
+      #- if: linux or osx
+      #  then:
+      #    - serial-monitor-rust --help
+      #  else:
+      #    - serial-monitor-rust.exe --help
+
+
+about:
+  homepage: https://github.com/hacknus/serial-monitor-rust
+  summary: 'A cross-plattform serial monitor/plotter written entirely in rust.'
+  description: |
+    A cross-platform serial monitor and plotter written
+    entirely in rust, the GUI is written using egui.
+    Inspired by the serial monitor/plotter from the Arduino IDE,
+    but both plotting and reading the traffic can be done simultaneously.
+  license: GPL-3.0-only
+  license_file:
+    - LICENSE
+    - THIRDPARTY.yml
+  repository: https://github.com/hacknus/serial-monitor-rust
+
+extra:
+  recipe-maintainers:
+    - MementoRC

@@ -1,0 +1,18 @@
+c_stdlib_version:
+  - if: osx and x86_64
+    then:
+      - 10.13
+  - if: osx and aarch64
+    then:
+      - 11.0
+MACOSX_DEPLOYEMENT_TARGET:
+  - if: osx and x86_64
+    then:
+      - 10.13
+  - if: osx and aarch64
+    then:
+      - 11.0
+c_compiler_version:
+  - if: osx
+    then:
+      - 19

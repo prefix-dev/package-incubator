@@ -10,8 +10,8 @@ platforms = ["osx-arm64", "linux-64", "win-64", "osx-64"]
 rattler-build = ">=0.31.1,<0.32"
 
 [tasks]
-build-all = "rattler-build build --recipe-dir ./recipes --skip-existing=all -c https://prefix.dev/prefix-package-incubator -c conda-forge"
-build = "rattler-build build -c https://prefix.dev/prefix-package-incubator -c conda-forge --recipe"
+build-all = "rattler-build build -m ./variants.yaml --recipe-dir ./recipes --skip-existing=all -c https://prefix.dev/prefix-package-incubator -c conda-forge"
+build = "rattler-build build -m ./variants.yaml -c https://prefix.dev/prefix-package-incubator -c conda-forge --recipe"
 
 [feature.update-versions.dependencies]
 python = "3.12.*"
