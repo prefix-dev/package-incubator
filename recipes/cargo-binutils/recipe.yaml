@@ -11,22 +11,44 @@ source:
 
 build:
   script: cargo install --root $PREFIX --no-track --locked --path .
-  # skip: win
+
 requirements:
   build:
     - ${{ compiler('rust') }}
     - ${{ compiler('c') }}
 
 tests:
-  - script: |
-      cd demo-crate
-
-      # Test cargo size command
-      cargo size --release | grep -q "text\|__TEXT"
-
-      # Test cargo nm command 
-      cargo nm --release | grep -q "main"
-
+  - package_contents:
+      files:
+        - bin/cargo-cov${{ ".exe" if win}}
+        - bin/cargo-nm${{ ".exe" if win}}
+        - bin/cargo-objcopy${{ ".exe" if win}}
+        - bin/cargo-objdump${{ ".exe" if win}}
+        - bin/cargo-profdata${{ ".exe" if win}}
+        - bin/cargo-readobj${{ ".exe" if win}}
+        - bin/cargo-size${{ ".exe" if win}}
+        - bin/cargo-strip${{ ".exe" if win}}
+        - bin/rust-ar${{ ".exe" if win}}
+        - bin/rust-cov${{ ".exe" if win}}
+        - bin/rust-ld${{ ".exe" if win}}
+        - bin/rust-lld${{ ".exe" if win}}
+        - bin/rust-nm${{ ".exe" if win}}
+        - bin/rust-objcopy${{ ".exe" if win}}
+        - bin/rust-objdump${{ ".exe" if win}}
+        - bin/rust-profdata${{ ".exe" if win}}
+        - bin/rust-readobj${{ ".exe" if win}}
+        - bin/rust-size${{ ".exe" if win}}
+        - bin/rust-strip${{ ".exe" if win}}
+  - script:
+      - if: unix
+        then:
+          - cd demo-crate
+          - cargo size --release | grep -q "text\|__TEXT"
+          - cargo nm --release | grep -q "main"
+        else:
+          - cd demo-crate
+          - cargo-size --release | findstr "text __TEXT"
+          - cargo-nm --release | findstr "main"
     files:
       recipe:
         - demo-crate/
