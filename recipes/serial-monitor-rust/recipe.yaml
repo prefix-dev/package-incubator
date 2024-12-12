@@ -21,7 +21,6 @@ build:
     # build and install serial-monitor-rust
     - cargo-bundle-licenses --format yaml --output ${SRC_DIR}/THIRDPARTY.yml
     - cargo install --locked --bins --root ${PREFIX} --path .
-    - ls bin
 
 requirements:
   build:
