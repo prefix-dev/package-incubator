@@ -11,7 +11,7 @@ source:
 
 build:
   script: cargo install --root $PREFIX --no-track --locked --path .
-  skip: win
+  # skip: win
 requirements:
   build:
     - ${{ compiler('rust') }}
