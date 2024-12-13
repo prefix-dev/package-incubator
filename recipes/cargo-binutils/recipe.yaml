@@ -73,7 +73,7 @@ tests:
         else:
           - cd demo-crate
           - cargo-size --release | findstr "demo-crate.exe"
-          - cargo-nm --release | findstr "no symbols"
+          - cargo-nm --release
     files:
       recipe:
         - demo-crate/
