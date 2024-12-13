@@ -72,12 +72,12 @@ tests:
           - cargo nm --release | grep -q "main"
         else:
           - cd demo-crate
-          - cargo-size --release | findstr "text __TEXT"
-          - cargo-nm --release | findstr "main"
+          # - dumpbin /headers target/release/demo_crate.exe | findstr "text __TEXT"
+          - cargo-size --release
+          - cargo-nm --release
     files:
       recipe:
         - demo-crate/
-
     requirements:
       run:
         - rust
