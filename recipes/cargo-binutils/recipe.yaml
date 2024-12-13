@@ -72,9 +72,8 @@ tests:
           - cargo nm --release | grep -q "main"
         else:
           - cd demo-crate
-          # - dumpbin /headers target/release/demo_crate.exe | findstr "text __TEXT"
-          - cargo-size --release
-          - cargo-nm --release
+          - cargo-size --release | findstr "demo-crate.exe"
+          - cargo-nm --release | findstr "no symbols"
     files:
       recipe:
         - demo-crate/
