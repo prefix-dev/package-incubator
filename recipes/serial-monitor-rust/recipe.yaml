@@ -1,5 +1,5 @@
 context:
-  version: "0.3.2"
+  version: "0.3.3"
 
 package:
   name: serial-monitor-rust
@@ -7,7 +7,7 @@ package:
 
 source:
   - url: https://github.com/hacknus/serial-monitor-rust/archive/refs/tags/v${{ version }}.tar.gz
-    sha256: 7d9e7f19f3dc86f74852dd0129dcb31feb08a3411269d337dba3463a4f479f01
+    sha256: 46f8a22100c504e9d7e5231a8e67cb7c1972e7105f61403475d98f3b9ec85abc
 
 build:
   number: 0
