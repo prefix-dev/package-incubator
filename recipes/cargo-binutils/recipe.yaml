@@ -10,10 +10,7 @@ source:
   sha256: 431fb12a47fafcb7047d41bdf4a4c9b77bea56856e0ef65c12c40f5fcb15f98f
 
 build:
-  script:
-    - if: unix
-      then: cargo install --root $PREFIX --no-track --locked --path .
-      else: cargo install --root "%PREFIX%" --no-track --locked --path .
+  script: cargo install --root ${{ PREFIX }} --no-track --locked --path .
 
 requirements:
   build:
@@ -23,47 +20,26 @@ requirements:
 tests:
   - package_contents:
       bin:
-        - if: unix
-          then:
-            - cargo-cov
-            - cargo-nm
-            - cargo-objcopy
-            - cargo-objdump
-            - cargo-profdata
-            - cargo-readobj
-            - cargo-size
-            - cargo-strip
-            - rust-ar
-            - rust-cov
-            - rust-ld
-            - rust-lld
-            - rust-nm
-            - rust-objcopy
-            - rust-objdump
-            - rust-profdata
-            - rust-readobj
-            - rust-size
-            - rust-strip
-          else:
-            - cargo-cov.exe
-            - cargo-nm.exe
-            - cargo-objcopy.exe
-            - cargo-objdump.exe
-            - cargo-profdata.exe
-            - cargo-readobj.exe
-            - cargo-size.exe
-            - cargo-strip.exe
-            - rust-ar.exe
-            - rust-cov.exe
-            - rust-ld.exe
-            - rust-lld.exe
-            - rust-nm.exe
-            - rust-objcopy.exe
-            - rust-objdump.exe
-            - rust-profdata.exe
-            - rust-readobj.exe
-            - rust-size.exe
-            - rust-strip.exe
+        - cargo-cov
+        - cargo-nm
+        - cargo-objcopy
+        - cargo-objdump
+        - cargo-profdata
+        - cargo-readobj
+        - cargo-size
+        - cargo-strip
+        - rust-ar
+        - rust-cov
+        - rust-ld
+        - rust-lld
+        - rust-nm
+        - rust-objcopy
+        - rust-objdump
+        - rust-profdata
+        - rust-readobj
+        - rust-size
+        - rust-strip
+
   - script:
       - if: unix
         then:
