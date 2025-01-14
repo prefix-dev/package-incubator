@@ -1,0 +1,54 @@
+context:
+  version: "1.15.3"
+
+package:
+  name: renode
+  version: ${{ version }}
+
+source:
+  - url: https://github.com/renode/renode/releases/download/v${{ version }}/renode-${{ version }}-1-x86_64.pkg.tar.xz
+    sha256: 92bddeebcb1ba2217aa229f12f948c3c11303071b06fdd81d858dfa2a390ea8a
+
+build:
+  skip: win
+  script:
+    - mkdir -p $PREFIX/bin
+    - cp -r ${SRC_DIR}/opt/renode/bin/* $PREFIX/bin/
+    - mono $PREFIX/bin/Renode.exe
+
+requirements:
+  build:
+    - if: win
+      then:
+        - dotnet-sdk
+    - if: linux
+      then:
+        - mono
+    - if: osx
+      then:
+        - mono
+  host:
+    - make
+  run:
+    - if: linux
+      then:
+        - conda-forge::libgtk2.0
+        - conda-forge::gtk-sharp2
+        - conda-forge::libicu
+        - conda-forge::gcc
+    - if: win
+      then:
+        - dotnet-sdk
+    - if: osx
+      then:
+        - mono
+
+about:
+  repository: https://github.com/renode/renode
+  license: MIT
+  summary: Renode - Antmicro's open source simulation and virtual development framework for complex embedded systems
+  homepage: https://renode.io
+
+extra:
+  recipe-maintainers:
+    - akhilender-bongirwar
