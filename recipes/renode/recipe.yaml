@@ -10,7 +10,9 @@ source:
     sha256: 92bddeebcb1ba2217aa229f12f948c3c11303071b06fdd81d858dfa2a390ea8a
 
 build:
-  skip: win
+  skip:
+    - win
+    - osx and arm64
   script:
     - mkdir -p $PREFIX/bin
     - cp -r ${SRC_DIR}/opt/renode/bin/* $PREFIX/bin/
