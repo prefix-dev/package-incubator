@@ -2,6 +2,6 @@ c_stdlib:
   - if: linux
     then: sysroot
   - if: osx
-    then: macosx_deployement_target
+    then: macosx_deployment_target
   - if: not unix
-    then: vs2019
+    then: vs
