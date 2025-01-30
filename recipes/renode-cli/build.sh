@@ -11,9 +11,7 @@ install_prefix="${PREFIX}/opt/${PKG_NAME}"
 dotnet_version=$(dotnet --version)
 framework_version=${dotnet_version%.*}
 
-# Update the submodule to the latest commit CMakeLists.txt
-cp ${RECIPE_DIR}/patches/Cores-CMakeLists.txt ${SRC_DIR}/src/Infrastructure/src/Emulator/Cores/CMakeLists.txt
-
+# Patch the project files to use the correct .NET version
 find lib src tests -name "*.csproj" -exec sed -i -E \
   -e "s/([>;])net6.0([<;])/\1net${framework_version}\2/" \
   -e "s|^((\s+)<PropertyGroup>)|\1\n\2\2<NoWarn>CS0168;CS0219;CS8981;SYSLIB0050;SYSLIB0051</NoWarn>|" \
@@ -23,24 +21,18 @@ find . -type d -name "obj" -exec rm -rf {} +
 find . -type d -name "bin" -exec rm -rf {} +
 sed -i -E 's/(ReleaseHeadless\|Any .+ = )Debug/\1Release/' Renode_NET.sln
 
-# export CC=${CC}
-# export CFLAGS="${CFLAGS} -fPIC"
-
 # Prevent CMake build since we provide the binaries
-sed -i -E 's;^(\s*)(cmake|\./check_weak_implementations|cp\s+(\-u\s+)?\-v\s+tlib/\*\.so);\1true \|\| \2;' build.sh
 mkdir -p ${SRC_DIR}/src/Infrastructure/src/Emulator/Cores/bin/Release/lib
 cp ${BUILD_PREFIX}/lib/renode-cores/* ${SRC_DIR}/src/Infrastructure/src/Emulator/Cores/bin/Release/lib
+
+# Remove the C cores that are not built in this recipe
 rm -f ${SRC_DIR}/src/Infrastructure/src/Emulator/Cores/translate*.cproj
 
-if [[ "${target_platform}" == linux-* ]] || [[ "${target_platform}" == osx-* ]]; then
-  _os_name=${target_platform%-*}
-  chmod +x build.sh tools/{building,packaging}/*.sh
-  ./build.sh --net --no-gui --force-net-framework-version ${framework_version}
-else
-  _os_name=windows
-  chmod +x build.sh tools/{building,packaging}/*.sh
-  ./build.sh --net --no-gui --force-net-framework-version ${framework_version}
-fi
+# Add dynamic libraries framewkr
+cp ${RECIPE_DIR}/helpers/DynamicLibraryLoader.{cs,csproj} ${SRC_DIR}/src/Renode
+
+chmod +x tools/{building,packaging}/*.sh
+${RECIPE_DIR}/helpers/renode_build_with_dotnet.sh ${framework_version}
 
 # Install procedure
 mkdir -p $PREFIX/libexec/${PKG_NAME}
@@ -63,7 +55,7 @@ cp -r tools/sel4_extensions $PREFIX/opt/${PKG_NAME}/tools
 
 cp lib/resources/styles/robot.css $PREFIX/opt/${PKG_NAME}/tests
 
-tools/packaging/common_copy_licenses.sh $PREFIX/opt/${PKG_NAME}/licenses $_os_name
+tools/packaging/common_copy_licenses.sh $PREFIX/opt/${PKG_NAME}/licenses linux
 cp -r $PREFIX/opt/${PKG_NAME}/licenses license-files
 
 sed -i.bak "s#os\.path\.join(this_path, '\.\./lib/resources/styles/robot\.css')#os.path.join(this_path,'robot.css')#g" $PREFIX/opt/${PKG_NAME}/tests/robot_tests_provider.py
@@ -85,7 +77,7 @@ cat > $PREFIX/bin/renode-test <<"EOF"
 #!/usr/bin/env bash
 
 STTY_CONFIG=`stty -g 2>/dev/null`
-python3 "${CONDA_PREFIX}"/opt/"${PKG_NAME}"/tests/run_tests.py --robot-framework-remote-server-full-directory "${CONDA_PREFIX}"/libexec/"${PKG_NAME}" "$@"
+python3 "${CONDA_PREFIX}"/opt/renode-cli/tests/run_tests.py --robot-framework-remote-server-full-directory "${CONDA_PREFIX}"/libexec/renode-cli "$@"
 RESULT_CODE=$?
 if [ -n "${STTY_CONFIG:-}" ]
 then
