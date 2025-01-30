@@ -25,6 +25,7 @@ source:
 build:
   number: 0
   noarch: generic
+  skip: win
 
 requirements:
   build:

@@ -4,6 +4,10 @@ c_stdlib:
     - if: osx
       then: macosx_deployment_target
 
+c_stdlib_version:
+    - if: osx and x86_64
+      then: 11.3
+
 m2w64_c_compiler:
   - m2w64-toolchain
 m2w64_cxx_compiler:
