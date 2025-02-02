@@ -6,23 +6,20 @@ for /f "tokens=1,2 delims=." %%a in ('dotnet --version') do (
 )
 
 rem Patch the project files to use the correct .NET version
-:: for /f "delims=" %%i in ('find lib src tests -name "*.csproj"') do (
-::     sed -i -E "s/([>;])net6.0([<;])/\1net${framework_version}\2/" "%%i"
-::     sed -i -E "s|^((\s+)<PropertyGroup>)|\1\n\2\2<NoWarn>CS0168;CS0219;CS8981;SYSLIB0050;SYSLIB0051</NoWarn>|" "%%i"
-:: )
-:: %BUILD_PREFIX%\Library\usr\bin\find.exe lib src tests -name "*.csproj" -exec sed -i -E ^
-::   -e "s/([>;])net6.0([<;])/\1net${framework_version}\2/" ^
-::   -e "s|^((\s+)<PropertyGroup>)|\1\n\2\2<NoWarn>CS0168;CS0219;CS8981;SYSLIB0050;SYSLIB0051</NoWarn>|" ^
-::   -e 's|^(\s+)<(Package)?Reference\s+Include="Mono.Posix".*\n||g' ^
-::   {} \;
-:: %BUILD_PREFIX%\Library\usr\bin\find.exe . -type d -name "obj" -exec rm -rf {} \;
-:: %BUILD_PREFIX%\Library\usr\bin\find.exe . -type d -name "bin" -exec rm -rf {} \;
+for /f "delims=" %%i in ('find lib src tests -name "*.csproj"') do (
+    sed -i -E "s/([>;])net6\.0.*([<;])/\1net${framework_version}\2/" "%%i"
+    sed -i -E "s|^((\s+)<PropertyGroup>)|\1\n\2\2<NoWarn>CS0168;CS0219;CS8981;SYSLIB0050;SYSLIB0051</NoWarn>|" "%%i"
+)
+%BUILD_PREFIX%\Library\usr\bin\find.exe . -type d -name "obj" -exec rm -rf {} \;
+%BUILD_PREFIX%\Library\usr\bin\find.exe . -type d -name "bin" -exec rm -rf {} \;
 sed -i -E "s/(ReleaseHeadless\|Any .+ = )Debug/\1Release/" Renode_NET.sln
+if %errorlevel% neq 0 exit /b %errorlevel%
 
-# Update System.Drawing.Common to 5.0.3
+:: Update System.Drawing.Common to 5.0.3
 sed -i -E 's|<PackageReference Include="System.Drawing.Common" Version="5.*" />|<PackageReference Include="System.Drawing.Common" Version="5.0.3" />|' \
-  "${SRC_DIR}/lib/termsharp/TermSharp_NET.csproj" \
-  "${SRC_DIR}/lib/termsharp/xwt/Xwt.*/Xwt.*.csproj"
+  "%SRC_DIR%"\lib\termsharp\TermSharp_NET.csproj \
+  "%SRC_DIR%"\lib\termsharp\xwt\Xwt.*\Xwt.*.csproj
+if %errorlevel% neq 0 exit /b %errorlevel%
 
 mkdir "%SRC_DIR%\src\Infrastructure\src\Emulator\Cores\bin\Release\lib"
 copy "%BUILD_PREFIX%\Library\lib\renode-cores\*" "%SRC_DIR%\src\Infrastructure\src\Emulator\Cores\bin\Release\lib"
