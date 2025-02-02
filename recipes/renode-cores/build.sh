@@ -10,7 +10,7 @@ cp cmake-tlib/tcg/CMakeLists.txt "${SRC_DIR}/src/Infrastructure/src/Emulator/Cor
 
 if [[ "${target_platform}" == "osx-arm64" ]]; then
   # We use Clang on osx-arm64, which does not support -Wno-error=clobbered/-Wno-clobbered
-  sed -i -E 's/add_definitions\(-Wno-error=clobbered\)/string(REPLACE "-Wno-clobbered" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")/' \
+  sed -i -E 's/add_definitions\(-Wno-error=clobbered\)/add_compile_options(-Wno-unknown-warning-option -Wno-clobbered)/' \
     "${SRC_DIR}/src/Infrastructure/src/Emulator/Cores/CMakeLists.txt" \
     "${SRC_DIR}/src/Infrastructure/src/Emulator/Cores/tlib/CMakeLists.txt" \
     "${SRC_DIR}/src/Infrastructure/src/Emulator/Cores/tlib/tcg/CMakeLists.txt"
