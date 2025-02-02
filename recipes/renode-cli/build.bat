@@ -1,11 +1,9 @@
 @echo off
 setlocal enabledelayedexpansion
 
-set "install_prefix=%PREFIX%\opt\%PKG_NAME%"
-
-:: for /f "tokens=*" %%i in ('dotnet --version') do set "dotnet_version=%%i"
-:: set "framework_version=%dotnet_version:~0,-2%"
-set "framework_version=8.0"
+for /f "tokens=1,2 delims=." %%a in ('dotnet --version') do (
+    set "framework_version=%%a.%%b"
+)
 
 rem Patch the project files to use the correct .NET version
 :: for /f "delims=" %%i in ('find lib src tests -name "*.csproj"') do (
@@ -20,6 +18,11 @@ rem Patch the project files to use the correct .NET version
 :: %BUILD_PREFIX%\Library\usr\bin\find.exe . -type d -name "obj" -exec rm -rf {} \;
 :: %BUILD_PREFIX%\Library\usr\bin\find.exe . -type d -name "bin" -exec rm -rf {} \;
 sed -i -E "s/(ReleaseHeadless\|Any .+ = )Debug/\1Release/" Renode_NET.sln
+
+# Update System.Drawing.Common to 5.0.3
+sed -i -E 's|<PackageReference Include="System.Drawing.Common" Version="5.*" />|<PackageReference Include="System.Drawing.Common" Version="5.0.3" />|' \
+  "${SRC_DIR}/lib/termsharp/TermSharp_NET.csproj" \
+  "${SRC_DIR}/lib/termsharp/xwt/Xwt.*/Xwt.*.csproj"
 
 mkdir "%SRC_DIR%\src\Infrastructure\src\Emulator\Cores\bin\Release\lib"
 copy "%BUILD_PREFIX%\Library\lib\renode-cores\*" "%SRC_DIR%\src\Infrastructure\src\Emulator\Cores\bin\Release\lib"

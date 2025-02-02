@@ -24,7 +24,7 @@ popd
 
 copy "%SRC_DIR%\src\Infrastructure\src\Emulator\Cores\tlib\softfloat-3\COPYING.txt" "%RECIPE_DIR%\softfloat-3-COPYING.txt"
 
-powershell -ExecutionPolicy Bypass -File "%RECIPE_DIR%\helpers\renode_build_with_cmake.ps1"
+call powershell -ExecutionPolicy Bypass -File "%RECIPE_DIR%\helpers\renode_build_with_cmake.ps1"
 if %errorlevel% neq 0 exit /b  %errorlevel%
 
 rem Install procedure into a conda path that renode-cli can retrieve

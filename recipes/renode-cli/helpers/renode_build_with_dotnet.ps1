@@ -13,11 +13,11 @@ $CMAKE_COMMON = ""
 
 $PARAMS = @()
 if ($env:CC) {
-    $PARAMS += "p:CompilerPath=$env:CC"
-    $PARAMS += "p:LinkerPath=$env:CC"
+    $PARAMS += "/p:CompilerPath=$env:CC"
+    $PARAMS += "/p:LinkerPath=$env:CC"
 }
 if ($env:AR) {
-    $PARAMS += "p:ArPath=$env:AR"
+    $PARAMS += "/p:ArPath=$env:AR"
 }
 $PARAMS += $args
 
@@ -56,23 +56,12 @@ Copy-Item -Path $PROP_FILE -Destination "$OUTPUT_DIRECTORY\properties.csproj"
 
 $CORES_PATH = "${env:SRC_DIR}\src\Infrastructure\src\Emulator\Cores"
 
-$PARAMS += "p:Configuration=${CONFIGURATION}${BUILD_TARGET}"
-$PARAMS += "p:GenerateFullPaths=true"
-$PARAMS += "p:Platform=`"$BUILD_PLATFORM`""
+$PARAMS += "/p:Configuration=${CONFIGURATION}${BUILD_TARGET}"
+$PARAMS += "/p:GenerateFullPaths=true"
+$PARAMS += "/p:Platform=`"$BUILD_PLATFORM`""
 
 # build
-function Build-Args-Helper {
-    param (
-        [string[]]$params
-    )
-    $retStr = ""
-    foreach ($p in $params) {
-        $retStr += " -$p"
-    }
-    return $retStr
-}
-
-Invoke-Expression "$CS_COMPILER $(Build-Args-Helper -params $PARAMS) $TARGET"
+& $CS_COMPILER @PARAMS $TARGET
 Set-Content -Path $BUILD_TYPE_FILE -Value $BUILD_TYPE
 
 # copy llvm library
