@@ -21,19 +21,21 @@ rem Patch the project files to use the correct .NET version
 :: %BUILD_PREFIX%\Library\usr\bin\find.exe . -type d -name "bin" -exec rm -rf {} \;
 sed -i -E "s/(ReleaseHeadless\|Any .+ = )Debug/\1Release/" Renode_NET.sln
 
-rem Prevent CMake build since we provide the binaries
 mkdir "%SRC_DIR%\src\Infrastructure\src\Emulator\Cores\bin\Release\lib"
-copy "%BUILD_PREFIX%\lib\renode-cores\*" "%SRC_DIR%\src\Infrastructure\src\Emulator\Cores\bin\Release\lib"
+copy "%BUILD_PREFIX%\Library\lib\renode-cores\*" "%SRC_DIR%\src\Infrastructure\src\Emulator\Cores\bin\Release\lib"
+if %errorlevel% neq 0 exit /b %errorlevel%
 
-rem Remove the C cores that are not built in this recipe
+rem Remove the C cores project that are not built in this recipe
 del "%SRC_DIR%\src\Infrastructure\src\Emulator\Cores\translate*.cproj"
 
 rem Build with dotnet
 call powershell "%RECIPE_DIR%\helpers\renode_build_with_dotnet.ps1" %framework_version%
+if %errorlevel% neq 0 exit /b %errorlevel%
 
 rem Install procedure
 mkdir "%PREFIX%\libexec\%PKG_NAME%"
 xcopy /e /i /y "output\bin\Release\net%framework_version%\*" "%PREFIX%\libexec\%PKG_NAME%"
+if %errorlevel% neq 0 exit /b %errorlevel%
 
 mkdir "%PREFIX%\opt\%PKG_NAME%\scripts"
 mkdir "%PREFIX%\opt\%PKG_NAME%\platforms"
