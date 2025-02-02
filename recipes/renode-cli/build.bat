@@ -14,7 +14,7 @@ sed -i -E "s/(ReleaseHeadless\|Any .+ = )Debug/\1Release/" Renode_NET.sln
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 :: Update System.Drawing.Common to 5.0.3
-sed -i -E 's|<PackageReference Include="System.Drawing.Common" Version="5.*" />|<PackageReference Include="System.Drawing.Common" Version="5.0.3" />|' \
+sed -i -E "s|<PackageReference Include=\"System.Drawing.Common\" Version=\"5.*\" />|<PackageReference Include=\"System.Drawing.Common\" Version=\"5.0.3\" />|" \
   "%SRC_DIR%"\lib\termsharp\TermSharp_NET.csproj \
   "%SRC_DIR%"\lib\termsharp\xwt\Xwt.*\Xwt.*.csproj
 if %errorlevel% neq 0 exit /b %errorlevel%
