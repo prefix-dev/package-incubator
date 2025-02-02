@@ -16,9 +16,10 @@ if [[ "${target_platform}" == "osx-arm64" ]]; then
     "${SRC_DIR}/src/Infrastructure/src/Emulator/Cores/tlib/tcg/CMakeLists.txt"
 
   # Oddly, it does not find additional.h, trying to add the include path
-  sed -i -E 's|    \$\{CMAKE_SOURCE_DIR\}|    \$\{CMAKE_SOURCE_DIR\} \$\{CMAKE_SOURCE_DIR\}/tlib \$\{CMAKE_SOURCE_DIR\}/tlib \$\{CMAKE_SOURCE_DIR\}/\.\.|' \
+  sed -i -E 's|    \$\{CMAKE_SOURCE_DIR\}|    \$\{CMAKE_SOURCE_DIR\} \$\{CMAKE_SOURCE_DIR\}/tlib/tcg \$\{CMAKE_SOURCE_DIR\}/\.\.|' \
     "${SRC_DIR}/src/Infrastructure/src/Emulator/Cores/tlib/tcg/CMakeLists.txt"
   grep -r "CMAKE_SOURCE_DIR" "${SRC_DIR}/src/Infrastructure/src/Emulator/Cores/tlib/tcg/CMakeLists.txt"
+  ls -l "${SRC_DIR}/src/Infrastructure/src/Emulator/Cores/tlib/tcg/additional.h"
 fi
 
 cp cmake-tlib/LICENSE "${RECIPE_DIR}/tlib-LICENSE"
