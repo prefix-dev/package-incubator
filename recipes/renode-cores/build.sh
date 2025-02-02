@@ -9,17 +9,15 @@ cp cmake-tlib/CMakeLists.txt "${SRC_DIR}/src/Infrastructure/src/Emulator/Cores/t
 cp cmake-tlib/tcg/CMakeLists.txt "${SRC_DIR}/src/Infrastructure/src/Emulator/Cores/tlib/tcg"
 
 if [[ "${target_platform}" == "osx-arm64" ]]; then
-  # We use Clang on osx-arm64, which does not support -Wno-error=clobbered/-Wno-error=clobbered
-  sed -i -E 's/add_definitions\(-Wno-error=clobbered\)/string(REPLACE "-Wno-error=clobbered" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")/' \
+  # We use Clang on osx-arm64, which does not support -Wno-error=clobbered/-Wno-clobbered
+  sed -i -E 's/add_definitions\(-Wno-error=clobbered\)/string(REPLACE "-Wno-clobbered" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")/' \
     "${SRC_DIR}/src/Infrastructure/src/Emulator/Cores/CMakeLists.txt" \
     "${SRC_DIR}/src/Infrastructure/src/Emulator/Cores/tlib/CMakeLists.txt" \
     "${SRC_DIR}/src/Infrastructure/src/Emulator/Cores/tlib/tcg/CMakeLists.txt"
 
   # Oddly, it does not find additional.h, trying to add the include path
-  sed -i -E 's|    \$\{CMAKE_SOURCE_DIR\}|    \$\{CMAKE_SOURCE_DIR\} \$\{CMAKE_SOURCE_DIR\}/tlib/tcg \$\{CMAKE_SOURCE_DIR\}/\.\.|' \
+  sed -i -E 's|    \$\{CMAKE_SOURCE_DIR\}|    \$\{CMAKE_SOURCE_DIR\} \$\{CMAKE_SOURCE_DIR\}/tlib/tcg|' \
     "${SRC_DIR}/src/Infrastructure/src/Emulator/Cores/tlib/tcg/CMakeLists.txt"
-  grep -r "CMAKE_SOURCE_DIR" "${SRC_DIR}/src/Infrastructure/src/Emulator/Cores/tlib/tcg/CMakeLists.txt"
-  ls -l "${SRC_DIR}/src/Infrastructure/src/Emulator/Cores/tlib/tcg/additional.h"
 fi
 
 cp cmake-tlib/LICENSE "${RECIPE_DIR}/tlib-LICENSE"
