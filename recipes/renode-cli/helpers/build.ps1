@@ -25,9 +25,18 @@ foreach ($file in $csprojFiles) {
     # Add package reference only to UI_NET.csproj
     if ($file.FullName -match "UI_NET\.csproj") {
         $csprojContent = $csprojContent -replace "(<\/ItemGroup>\s*<\/Project>)", "  <ItemGroup>`n    <PackageReference Include=`"System.Windows.Forms`" Version=`"8.0.0`" />`n  </ItemGroup>`$1"
-        Write-Host "Verifying $file.FullName:"
-        $csprojContent | Select-String "<TargetFrameworks>"
-        $csprojContent | Select-String "System\.Windows\.Presentation"
+        Write-Verbose "Verifying $($file.FullName):"
+        $updatedContent = Get-Content $file.FullName # Read from the updated file
+        if ($updatedContent -match "<TargetFrameworks>net8\.0") {
+            Write-Verbose "TargetFrameworks: net8.0 (OK)"
+        } else {
+            Write-Warning "TargetFrameworks not found or incorrect in $($file.FullName)"
+        }
+        if ($updatedContent -match "System\.Windows") { # Check for the correct package
+            Write-Verbose "System.Windows package reference found (OK)"
+        } else {
+            Write-Warning "System.Windows package reference not found in $($file.FullName)"
+        }
     }
 
     # Remove excessive warnings .csproj files (TargetFramework and NoWarn)
