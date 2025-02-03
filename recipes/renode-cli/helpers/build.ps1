@@ -25,11 +25,9 @@ foreach ($file in $csprojFiles) {
     # Add package reference only to UI_NET.csproj
     if ($file.FullName -match "UI_NET\.csproj") {
         $csprojContent = $csprojContent -replace "(<\/ItemGroup>\s*<\/Project>)", "  <ItemGroup>`n    <PackageReference Include=`"System.Windows.Forms`" Version=`"8.0.0`" />`n  </ItemGroup>`$1"
-    }
-    if ($file.FullName -match "WindowPositionProvider\.cs") {
-        if (!($csprojContent -match "using System\.Windows\.Forms;")) {
-            $csprojContent = "using System.Windows.Forms;`n" + $csprojContent
-        }
+        Write-Host "Verifying $file.FullName:"
+        $csprojContent | Select-String "<TargetFrameworks>"
+        $csprojContent | Select-String "System\.Windows\.Presentation"
     }
 
     # Remove excessive warnings .csproj files (TargetFramework and NoWarn)
@@ -62,7 +60,7 @@ Copy-Item -Path "$SRC_DIR\tools\metrics_analyzer", "$SRC_DIR\tools\execution_tra
 
 Copy-Item "$SRC_DIR\lib\resources\styles\robot.css" "$PREFIX\opt\$PKG_NAME\tests" -Force
 
-& tools\packaging\common_copy_licenses.ps1 "$PREFIX\opt\$PKG_NAME\licenses" linux
+& $SRC_DIR\tools\packaging\common_copy_licenses.ps1 "$PREFIX\opt\$PKG_NAME\licenses" linux
 Copy-Item -Path "$PREFIX\opt\$PKG_NAME\licenses" -Destination "license-files" -Recurse -Force
 
 # Update robot_tests_provider.py (replace path to robot.css)
