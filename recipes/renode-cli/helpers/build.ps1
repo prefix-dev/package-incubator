@@ -23,7 +23,7 @@ foreach ($file in $csprojFiles) {
 
     # Add package reference only to UI_NET.csproj
     if ($file.FullName -match "UI_NET\.csproj") {
-        $csprojContent = $csprojContent -replace "</ItemGroup>", "`n  <ItemGroup>`n    <PackageReference Include=`"System.Windows.Forms`" Version=`"8.0.0`" />`n  </ItemGroup>`n</ItemGroup>"
+        $csprojContent = $csprojContent -replace "(<\/ItemGroup>\s*<\/Project>)", "  <ItemGroup>`n    <PackageReference Include=`"System.Windows.Forms`" Version=`"8.0.0`" />`n  </ItemGroup>`$1"
     }
 
     # Remove excessive warnings .csproj files (TargetFramework and NoWarn)

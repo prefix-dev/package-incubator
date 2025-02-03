@@ -2,7 +2,9 @@ param (
     [string]$framework_version
 )
 
-$OUTPUT_DIRECTORY = "${env:SRC_DIR}\output"
+$SRC_DIR = Resolve-Path "$Env:SRC_DIR"
+
+$OUTPUT_DIRECTORY = "$SRC_DIR\output"
 $CONFIGURATION = "Release"
 $BUILD_PLATFORM = "Any CPU"
 $HEADLESS = $true
@@ -12,12 +14,12 @@ $HOST_ARCH = "i386"
 $CMAKE_COMMON = ""
 
 $PARAMS = @()
-if ($env:CC) {
-    $PARAMS += "/p:CompilerPath=$env:CC"
-    $PARAMS += "/p:LinkerPath=$env:CC"
+if ($Env:CC) {
+    $PARAMS += "/p:CompilerPath=$Env:CC"
+    $PARAMS += "/p:LinkerPath=$Env:CC"
 }
-if ($env:AR) {
-    $PARAMS += "/p:ArPath=$env:AR"
+if ($Env:AR) {
+    $PARAMS += "/p:ArPath=$Env:AR"
 }
 $PARAMS += $args
 
@@ -30,29 +32,30 @@ $DirectoryBuildTargetsContent = @"
 <Project>
   <PropertyGroup>
     <TargetFrameworks>$TFM</TargetFrameworks>
-    ${env:OS_SPECIFIC_TARGET_OPTS}
+    ${Env:OS_SPECIFIC_TARGET_OPTS}
   </PropertyGroup>
 </Project>
 "@
 
-$DirectoryBuildTargetsPath = "${env:SRC_DIR}\Directory.Build.targets"
+$DirectoryBuildTargetsPath = "$SRC_DIR\Directory.Build.targets"
 Set-Content -Path $DirectoryBuildTargetsPath -Value $DirectoryBuildTargetsContent
 
-$env:DOTNET_CLI_TELEMETRY_OPTOUT = 1
+$Env:DOTNET_CLI_TELEMETRY_OPTOUT = 1
 $CS_COMPILER = "dotnet build"
-$TARGET = "${env:SRC_DIR}\Renode_NET.sln"
+$TARGET = "$SRC_DIR\Renode_NET.sln"
 $BUILD_TYPE = "dotnet"
 
-$OUT_BIN_DIR = "${env:SRC_DIR}\output\bin\$CONFIGURATION"
+$OUT_BIN_DIR = "$SRC_DIR\output\bin\$CONFIGURATION"
 $BUILD_TYPE_FILE = "$OUT_BIN_DIR\build_type"
 
 # Copy properties file according to the running OS
+New-Item -ItemType Directory -Force -Path $OUT_BIN_DIR
 New-Item -ItemType Directory -Force -Path $OUTPUT_DIRECTORY
 # Remove-Item -Force -Path "$OUTPUT_DIRECTORY\properties.csproj"
-$PROP_FILE = "${env:SRC_DIR}\src\Infrastructure\src\Emulator\Cores\windows-properties_NET.csproj"
+$PROP_FILE = "$SRC_DIR\src\Infrastructure\src\Emulator\Cores\windows-properties_NET.csproj"
 Copy-Item -Path $PROP_FILE -Destination "$OUTPUT_DIRECTORY\properties.csproj"
 
-$CORES_PATH = "${env:SRC_DIR}\src\Infrastructure\src\Emulator\Cores"
+$CORES_PATH = "$SRC_DIR\src\Infrastructure\src\Emulator\Cores"
 
 $PARAMS += "/p:Configuration=${CONFIGURATION}${BUILD_TARGET}"
 $PARAMS += "/p:GenerateFullPaths=true"
