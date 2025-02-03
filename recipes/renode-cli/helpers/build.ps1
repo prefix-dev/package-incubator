@@ -10,7 +10,21 @@ if ($dotnet_version -match "^(\d+\.\d+)") {
 # Update Renode_NET.sln (replace Debug with Release)
 (Get-Content "Renode_NET.sln") | ForEach-Object { $_ -replace "(ReleaseHeadless\|Any CPU\..+ = )Debug", '$1Release' } | Set-Content "Renode_NET.sln"
 
-# Prevent CMake build, copy pre-built binaries
+# Update System.Drawing.Common to 5.0.3
+$csprojFiles = Get-ChildItem -Path "$env:SRC_DIR" -Filter "*\.csproj" -Recurse | Where-Object {$_.FullName -match "termsharp(\\|/)TermSharp_NET\.csproj|termsharp(\\|/)xwt(\\|/)Xwt\..+"}
+foreach ($file in $csprojFiles) {
+    (Get-Content $file.FullName) | ForEach-Object { $_ -replace "<PackageReference Include=`"System\.Drawing\.Common`" Version=`"5\..*`" />", "<PackageReference Include=`"System.Drawing.Common`" Version=`"5.0.3`" />" } | Set-Content $file.FullName
+}
+
+# Remove excessive warnings .csproj files (TargetFramework and NoWarn)
+$csprojFiles = Get-ChildItem -Path "$env:SRC_DIR" -Filter "*.csproj" -Recurse | Where-Object {$_.FullName -match "(lib|src|tests)"}
+foreach ($file in $csprojFiles) {
+    $csprojContent = (Get-Content $file.FullName)
+    $csprojContent = $csprojContent -replace "(<PropertyGroup>)", "`$1`n`t`t<NoWarn>CS0168;CS0219;CS8981;SYSLIB0050;SYSLIB0051</NoWarn>"
+    Set-Content -Path $file.FullName -Value $csprojContent
+}
+
+# Install renode-cores .so where they are looked for
 New-Item -ItemType Directory -Path "$Env:SRC_DIR\src\Infrastructure\src\Emulator\Cores\bin\Release\lib" -Force
 Copy-Item -Path "$Env:BUILD_PREFIX\Library\lib\renode-cores\*" -Destination "$Env:SRC_DIR\src\Infrastructure\src\Emulator\Cores\bin\Release\lib" -Force
 
@@ -18,6 +32,7 @@ Copy-Item -Path "$Env:BUILD_PREFIX\Library\lib\renode-cores\*" -Destination "$En
 Remove-Item -Path "$Env:SRC_DIR\src\Infrastructure\src\Emulator\Cores\translate*.cproj" -Force
 
 # Build with dotnet
+New-Item -ItemType Directory -Path "$Env:PREFIX\Library\lib" -Force
 & $Env:RECIPE_DIR\helpers\renode_build_with_dotnet.ps1 $framework_version
 
 # Install procedure
