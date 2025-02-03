@@ -9,7 +9,7 @@ if ($dotnet_version -match "^(\d+\.\d+)") {
 
 # Update Renode_NET.sln (replace Debug with Release)
 (Get-Content "Renode_NET.sln") | ForEach-Object { $_ -replace "(ReleaseHeadless\|Any CPU\..+ = )Debug", '$1Release' } | Set-Content "Renode_NET.sln"
-Debug|Any CPU = Release|Any CPU
+
 # Prevent CMake build, copy pre-built binaries
 New-Item -ItemType Directory -Path "$Env:SRC_DIR\src\Infrastructure\src\Emulator\Cores\bin\Release\lib" -Force
 Copy-Item -Path "$Env:BUILD_PREFIX\Library\lib\renode-cores\*" -Destination "$Env:SRC_DIR\src\Infrastructure\src\Emulator\Cores\bin\Release\lib" -Force
