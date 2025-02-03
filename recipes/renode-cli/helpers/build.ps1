@@ -10,6 +10,7 @@ if ($dotnet_version -match "^(\d+\.\d+)") {
 $SRC_DIR = Resolve-Path "$Env:SRC_DIR"
 $BUILD_PREFIX = Resolve-Path "$Env:BUILD_PREFIX"
 $PREFIX = Resolve-Path "$Env:PREFIX"
+$PKG_NAME = $Env:PKG_NAME
 
 # Update Renode_NET.sln (replace Debug with Release)
 (Get-Content "Renode_NET.sln") | ForEach-Object { $_ -replace "(ReleaseHeadless\|Any CPU\..+ = )Debug", '$1Release' } | Set-Content "Renode_NET.sln"
@@ -24,6 +25,11 @@ foreach ($file in $csprojFiles) {
     # Add package reference only to UI_NET.csproj
     if ($file.FullName -match "UI_NET\.csproj") {
         $csprojContent = $csprojContent -replace "(<\/ItemGroup>\s*<\/Project>)", "  <ItemGroup>`n    <PackageReference Include=`"System.Windows.Forms`" Version=`"8.0.0`" />`n  </ItemGroup>`$1"
+    }
+    if ($file.FullName -match "WindowPositionProvider\.cs") {
+        if (!($csprojContent -match "using System\.Windows\.Forms;")) {
+            $csprojContent = "using System.Windows.Forms;`n" + $csprojContent
+        }
     }
 
     # Remove excessive warnings .csproj files (TargetFramework and NoWarn)
@@ -43,24 +49,24 @@ New-Item -ItemType Directory -Path "$PREFIX\Library\lib" -Force
 & $Env:RECIPE_DIR\helpers\renode_build_with_dotnet.ps1 $framework_version
 
 # Install procedure
-New-Item -ItemType Directory -Path "$PREFIX\libexec\$Env:PKG_NAME" -Force
-Copy-Item -Path "output\bin\Release\net$framework_version\*" -Destination "$PREFIX\libexec\$Env:PKG_NAME" -Recurse -Force
+New-Item -ItemType Directory -Path "$PREFIX\libexec\$PKG_NAME" -Force
+Copy-Item -Path "$SRC_DIR\output\bin\Release\net$framework_version\*" -Destination "$PREFIX\libexec\$PKG_NAME" -Recurse -Force
 
-New-Item -ItemType Directory -Path "$PREFIX\opt\$Env:PKG_NAME\scripts", "$PREFIX\opt\$Env:PKG_NAME\platforms", "$PREFIX\opt\$Env:PKG_NAME\tests", "$PREFIX\opt\$Env:PKG_NAME\tools", "$PREFIX\opt\$Env:PKG_NAME\licenses" -Force
+New-Item -ItemType Directory -Path "$PREFIX\opt\$PKG_NAME\scripts", "$PREFIX\opt\$PKG_NAME\platforms", "$PREFIX\opt\$PKG_NAME\tests", "$PREFIX\opt\$PKG_NAME\tools", "$PREFIX\opt\$PKG_NAME\licenses" -Force
 
-Copy-Item -Path ".renode-root" -Destination "$PREFIX\opt\$Env:PKG_NAME" -Force
-Copy-Item -Path "scripts\*" -Destination "$PREFIX\opt\$Env:PKG_NAME\scripts" -Recurse -Force
-Copy-Item -Path "platforms\*" -Destination "$PREFIX\opt\$Env:PKG_NAME\platforms" -Recurse -Force
-Copy-Item -Path "tests\*" -Destination "$PREFIX\opt\$Env:PKG_NAME\tests" -Recurse -Force
-Copy-Item -Path "tools\metrics_analyzer", "tools\execution_tracer", "tools\gdb_compare", "tools\sel4_extensions" -Destination "$PREFIX\opt\$Env:PKG_NAME\tools" -Recurse -Force
+Copy-Item -Path "$SRC_DIR\.renode-root" -Destination "$PREFIX\opt\$PKG_NAME" -Force
+Copy-Item -Path "$SRC_DIR\scripts\*" -Destination "$PREFIX\opt\$PKG_NAME\scripts" -Recurse -Force
+Copy-Item -Path "$SRC_DIR\platforms\*" -Destination "$PREFIX\opt\$PKG_NAME\platforms" -Recurse -Force
+Copy-Item -Path "$SRC_DIR\tests\*" -Destination "$PREFIX\opt\$PKG_NAME\tests" -Recurse -Force
+Copy-Item -Path "$SRC_DIR\tools\metrics_analyzer", "$SRC_DIR\tools\execution_tracer", "$SRC_DIR\tools\gdb_compare", "$SRC_DIR\tools\sel4_extensions" -Destination "$PREFIX\opt\$PKG_NAME\tools" -Recurse -Force
 
-Copy-Item "lib\resources\styles\robot.css" "$PREFIX\opt\$Env:PKG_NAME\tests" -Force
+Copy-Item "$SRC_DIR\lib\resources\styles\robot.css" "$PREFIX\opt\$PKG_NAME\tests" -Force
 
-& tools\packaging\common_copy_licenses.ps1 "$PREFIX\opt\$Env:PKG_NAME\licenses" linux
-Copy-Item -Path "$PREFIX\opt\$Env:PKG_NAME\licenses" -Destination "license-files" -Recurse -Force
+& tools\packaging\common_copy_licenses.ps1 "$PREFIX\opt\$PKG_NAME\licenses" linux
+Copy-Item -Path "$PREFIX\opt\$PKG_NAME\licenses" -Destination "license-files" -Recurse -Force
 
 # Update robot_tests_provider.py (replace path to robot.css)
-(Get-Content "$PREFIX\opt\$Env:PKG_NAME\tests\robot_tests_provider.py") | ForEach-Object { $_ -replace "os\.path\.join\(this_path, '\.\./lib/resources/styles/robot\.css'\)", "os.path.join(this_path,'robot.css')" } | Set-Content "$PREFIX\opt\$Env:PKG_NAME\tests\robot_tests_provider.py"
+(Get-Content "$PREFIX\opt\$PKG_NAME\tests\robot_tests_provider.py") | ForEach-Object { $_ -replace "os\.path\.join\(this_path, '\.\./lib/resources/styles/robot\.css'\)", "os.path.join(this_path,'robot.css')" } | Set-Content "$PREFIX\opt\$PKG_NAME\tests\robot_tests_provider.py"
 
 # Create renode.cmd
 New-Item -ItemType File -Path "$PREFIX\bin\renode.cmd" -Force
@@ -81,5 +87,3 @@ set "RESULT_CODE=%ERRORLEVEL%"
 if not "%STTY_CONFIG%"=="" stty "%STTY_CONFIG%"
 exit /b %RESULT_CODE%
 "@ | Out-File -FilePath "$PREFIX\bin\renode-test.cmd" -Encoding ascii
-# No chmod +x needed in PowerShell
-

@@ -41,7 +41,7 @@ $DirectoryBuildTargetsPath = "$SRC_DIR\Directory.Build.targets"
 Set-Content -Path $DirectoryBuildTargetsPath -Value $DirectoryBuildTargetsContent
 
 $Env:DOTNET_CLI_TELEMETRY_OPTOUT = 1
-$CS_COMPILER = "dotnet build"
+$CS_COMPILER = "dotnet build /m"
 $TARGET = "$SRC_DIR\Renode_NET.sln"
 $BUILD_TYPE = "dotnet"
 
@@ -68,4 +68,4 @@ Set-Content -Path $BUILD_TYPE_FILE -Value $BUILD_TYPE
 # copy llvm library
 $LLVM_LIB = "libllvm-disas"
 $LIB_EXT = "dll"
-Copy-Item -Path "lib\resources\llvm\$LLVM_LIB.$LIB_EXT" -Destination "$OUT_BIN_DIR\libllvm-disas.$LIB_EXT"
+Copy-Item -Path "$SRC_DIR\lib\resources\llvm\$LLVM_LIB.$LIB_EXT" -Destination "$OUT_BIN_DIR\libllvm-disas.$LIB_EXT"
