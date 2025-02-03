@@ -23,9 +23,7 @@ $PARAMS += $args
 
 if ($HEADLESS) {
     $BUILD_TARGET = "Headless"
-    $PARAMS += "p:GUI_DISABLED=true"
-} else {
-    $BUILD_TARGET = "Mono"
+    $PARAMS += "/p:GUI_DISABLED=true"
 }
 
 $DirectoryBuildTargetsContent = @"
