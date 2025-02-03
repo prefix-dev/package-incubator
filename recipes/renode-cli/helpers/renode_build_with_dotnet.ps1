@@ -61,7 +61,7 @@ $PARAMS += "/p:GenerateFullPaths=true"
 $PARAMS += "/p:Platform=`"$BUILD_PLATFORM`""
 
 # build
-& $CS_COMPILER @PARAMS $TARGET
+Invoke-Expression "$CS_COMPILER @PARAMS $TARGET"
 Set-Content -Path $BUILD_TYPE_FILE -Value $BUILD_TYPE
 
 # copy llvm library
