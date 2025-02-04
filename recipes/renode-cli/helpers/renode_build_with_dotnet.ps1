@@ -9,7 +9,7 @@ $CONFIGURATION = "Release"
 $BUILD_PLATFORM = "Any CPU"
 $HEADLESS = $true
 $NET = $true
-$TFM = "net$framework_version"
+$TFM = "net$framework_version-windows"
 $HOST_ARCH = "i386"
 $CMAKE_COMMON = ""
 
