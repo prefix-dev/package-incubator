@@ -24,14 +24,7 @@ foreach ($file in $csprojFiles) {
 
     # Add package reference only to UI_NET.csproj
     if ($file.FullName -match "UI_NET\.csproj") {
-        $csprojContent = $csprojContent -replace "(<PackageReference Include=`"Microsoft.CSharp`" Version=`"4.7.0`" \/>)", "`$1`n    <PackageReference Include=`"System.Windows`" Version=`"8.0.0`" />"
-        Write-Verbose "Verifying $($file.FullName):"
-        $updatedContent = Get-Content $file.FullName # Read from the updated file
-        if ($updatedContent -match "System\.Windows") { # Check for the correct package
-            Write-Verbose "System.Windows package reference found (OK)"
-        } else {
-            Write-Warning "System.Windows package reference not found in $($file.FullName)"
-        }
+        $csprojContent = $csprojContent -replace "(<PackageReference Include=`"Microsoft.CSharp`" Version=`"4.7.0`" \/>)", "`$1`n    <PackageReference Include=`"System.Windows.Presentation`" Version=`"8.0.0`" />"
     }
 
     # Remove excessive warnings .csproj files (TargetFramework and NoWarn)
