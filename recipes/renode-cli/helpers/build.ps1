@@ -25,7 +25,8 @@ foreach ($file in $csprojFiles) {
     # Add package reference only to UI_NET.csproj
     if ($file.FullName -match "(UI)_NET\.csproj") {
         if ($csprojContent -notmatch "PresentationFramework") {
-            $csprojContent = $csprojContent -replace "(<\/Project>)", "  <ItemGroup>`n    <PackageReference Include=`"PresentationFramework`" Version=`"4.6.0`" />`n  </ItemGroup>`n`$1"
+            # $csprojContent = $csprojContent -replace "(<\/Project>)", "  <ItemGroup>`n    <PackageReference Include=`"PresentationFramework`" Version=`"4.6.0`" />`n  </ItemGroup>`n`$1"
+            $csprojContent = $csprojContent -replace "(<\/PropertyGroup>)", "     <UseWPF>true</UseWPF>`n`$1"
         }
     }
 
@@ -47,7 +48,7 @@ New-Item -ItemType Directory -Path "$PREFIX\Library\lib" -Force
 
 # Install procedure
 New-Item -ItemType Directory -Path "$PREFIX\libexec\$PKG_NAME" -Force
-Copy-Item -Path "$SRC_DIR\output\bin\Release\net$framework_version\*" -Destination "$PREFIX\libexec\$PKG_NAME" -Recurse -Force
+Copy-Item -Path "$SRC_DIR\output\bin\Release\net$framework_version\*" -Destination "$PREFIX\libexec\$PKG_NAME\" -Recurse -Force
 
 New-Item -ItemType Directory -Path "$PREFIX\opt\$PKG_NAME\scripts", "$PREFIX\opt\$PKG_NAME\platforms", "$PREFIX\opt\$PKG_NAME\tests", "$PREFIX\opt\$PKG_NAME\tools", "$PREFIX\opt\$PKG_NAME\licenses" -Force
 
@@ -59,7 +60,7 @@ Copy-Item -Path "$SRC_DIR\tools\metrics_analyzer", "$SRC_DIR\tools\execution_tra
 
 Copy-Item "$SRC_DIR\lib\resources\styles\robot.css" "$PREFIX\opt\$PKG_NAME\tests" -Force
 
-& $SRC_DIR\tools\packaging\common_copy_licenses.ps1 "$PREFIX\opt\$PKG_NAME\licenses" linux
+Invoke-Expression $SRC_DIR\tools\packaging\common_copy_licenses.ps1 "$PREFIX\opt\$PKG_NAME\licenses" linux
 Copy-Item -Path "$PREFIX\opt\$PKG_NAME\licenses" -Destination "license-files" -Recurse -Force
 
 # Update robot_tests_provider.py (replace path to robot.css)
