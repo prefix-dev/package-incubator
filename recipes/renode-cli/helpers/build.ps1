@@ -25,7 +25,7 @@ foreach ($file in $csprojFiles) {
     # Add package reference only to UI_NET.csproj
     if ($file.FullName -match "(UI)_NET\.csproj") {
         if ($csprojContent -notmatch "PresentationFramework") {
-            $csprojContent = $csprojContent -replace "(<\/Project>)", "  <ItemGroup>`n    <PackageReference Include=`"PresentationFramework`" Version=`"8.0.0`" />`n  </ItemGroup>`n`$1"
+            $csprojContent = $csprojContent -replace "(<\/Project>)", "  <ItemGroup>`n    <PackageReference Include=`"PresentationFramework`" Version=`"4.6.0`" />`n  </ItemGroup>`n`$1"
         }
     }
 
