@@ -23,11 +23,12 @@ foreach ($file in $csprojFiles) {
     $csprojContent = $csprojContent -replace "<PackageReference Include=`"System\.Drawing\.Common`" Version=`"5\..*`" />", "<PackageReference Include=`"System.Drawing.Common`" Version=`"5.0.3`" />"
 
     # Add package reference only to UI_NET.csproj
-    # if ($file.FullName -match "(UI|Renode|RenodeTests|Peripherals|UnitTests|MonitorTests)_NET\.csproj") {
-    #     if ($csprojContent -notmatch "System\.Windows\.Presentation") {
-    #         $csprojContent = $csprojContent -replace "(<\/Project>)", "  <ItemGroup>`n    <PackageReference Include=`"System.Windows.Presentation`" Version=`"8.0.0`" />`n  </ItemGroup>`n`$1"
-    #     }
-    # }
+    if ($file.FullName -match "(UI)_NET\.csproj") {
+        if ($csprojContent -notmatch "PresentationFramework") {
+            $csprojContent = $csprojContent -replace "(<\/Project>)", "  <ItemGroup>`n    <PackageReference Include=`"PresentationFramework`" Version=`"8.0.0`" />`n  </ItemGroup>`n`$1"
+        }
+    }
+
     # Remove excessive warnings .csproj files (TargetFramework and NoWarn)
     $csprojContent = $csprojContent -replace "(<PropertyGroup>)", "`$1`n`t`t<NoWarn>CA1416;CS0649;CS0168;CS0219;CS8981;SYSLIB0050;SYSLIB0051</NoWarn>"
     Set-Content -Path $file.FullName -Value $csprojContent
