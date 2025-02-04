@@ -48,7 +48,7 @@ New-Item -ItemType Directory -Path "$PREFIX\Library\lib" -Force
 
 # Install procedure
 New-Item -ItemType Directory -Path "$PREFIX\libexec\$PKG_NAME" -Force
-Copy-Item -Path "$SRC_DIR\output\bin\Release\net$framework_version\*" -Destination "$PREFIX\libexec\$PKG_NAME\" -Recurse -Force
+Copy-Item -Path "$SRC_DIR\output\bin\Release\net$framework_version-windows\*" -Destination "$PREFIX\libexec\$PKG_NAME\" -Recurse -Force
 
 New-Item -ItemType Directory -Path "$PREFIX\opt\$PKG_NAME\scripts", "$PREFIX\opt\$PKG_NAME\platforms", "$PREFIX\opt\$PKG_NAME\tests", "$PREFIX\opt\$PKG_NAME\tools", "$PREFIX\opt\$PKG_NAME\licenses" -Force
 
