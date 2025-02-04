@@ -24,14 +24,9 @@ foreach ($file in $csprojFiles) {
 
     # Add package reference only to UI_NET.csproj
     if ($file.FullName -match "UI_NET\.csproj") {
-        $csprojContent = $csprojContent -replace "(<\/ItemGroup>\s*<\/Project>)", "  <ItemGroup>`n    <PackageReference Include=`"System.Windows`" Version=`"8.0.0`" />`n  </ItemGroup>`$1"
+        $csprojContent = $csprojContent -replace "(<PackageReference Include=`"Microsoft.CSharp`" Version=`"4.7.0`" \/>)", "`$1`n    <PackageReference Include=`"System.Windows`" Version=`"8.0.0`" />"
         Write-Verbose "Verifying $($file.FullName):"
         $updatedContent = Get-Content $file.FullName # Read from the updated file
-        if ($updatedContent -match "<TargetFrameworks>net8\.0") {
-            Write-Verbose "TargetFrameworks: net8.0 (OK)"
-        } else {
-            Write-Warning "TargetFrameworks not found or incorrect in $($file.FullName)"
-        }
         if ($updatedContent -match "System\.Windows") { # Check for the correct package
             Write-Verbose "System.Windows package reference found (OK)"
         } else {
