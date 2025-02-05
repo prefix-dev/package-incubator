@@ -62,9 +62,8 @@ Copy-Item "$SRC_DIR\lib\resources\styles\robot.css" "$PREFIX\opt\$PKG_NAME\tests
 
 $licensesPath = (Resolve-Path "$PREFIX\opt\$PKG_NAME\licenses").Path -replace '\\', '/'
 $scriptPath = (Resolve-Path "$SRC_DIR\tools\packaging\common_copy_licenses.sh").Path -replace '\\', '/'
-& "bash.exe" -c """
-"$scriptPath" "$licensesPath" "linux"
-"""
+$command = "'$scriptPath' '$licensesPath' 'linux'"
+& "bash.exe" -c $command
 Copy-Item -Path "$PREFIX\opt\$PKG_NAME\licenses" -Destination "license-files" -Recurse -Force
 
 # Update robot_tests_provider.py (replace path to robot.css)
