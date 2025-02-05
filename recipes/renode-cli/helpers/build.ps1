@@ -61,7 +61,7 @@ Copy-Item -Path "$SRC_DIR\tools\metrics_analyzer", "$SRC_DIR\tools\execution_tra
 Copy-Item "$SRC_DIR\lib\resources\styles\robot.css" "$PREFIX\opt\$PKG_NAME\tests" -Force
 
 chmod +x "$SRC_DIR/tools/packaging/common_copy_licenses.sh"
-Invoke-Expression bash -c "$SRC_DIR\tools\packaging\common_copy_licenses.sh $PREFIX\opt\$PKG_NAME\licenses linux"
+bash -c "$SRC_DIR\tools\packaging\common_copy_licenses.sh $PREFIX\opt\$PKG_NAME\licenses linux"
 Copy-Item -Path "$PREFIX\opt\$PKG_NAME\licenses" -Destination "license-files" -Recurse -Force
 
 # Update robot_tests_provider.py (replace path to robot.css)
