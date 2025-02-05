@@ -60,8 +60,11 @@ Copy-Item -Path "$SRC_DIR\tools\metrics_analyzer", "$SRC_DIR\tools\execution_tra
 
 Copy-Item "$SRC_DIR\lib\resources\styles\robot.css" "$PREFIX\opt\$PKG_NAME\tests" -Force
 
-chmod +x "$SRC_DIR/tools/packaging/common_copy_licenses.sh"
-bash -c "$SRC_DIR\tools\packaging\common_copy_licenses.sh $PREFIX\opt\$PKG_NAME\licenses linux"
+$licensesPath = (Resolve-Path "$PREFIX\opt\$PKG_NAME\licenses").Path -replace '\\', '/'
+$scriptPath = (Resolve-Path "$SRC_DIR\tools\packaging\common_copy_licenses.sh").Path -replace '\\', '/'
+& "bash.exe" -c """
+"$scriptPath" "$licensesPath" "linux"
+"""
 Copy-Item -Path "$PREFIX\opt\$PKG_NAME\licenses" -Destination "license-files" -Recurse -Force
 
 # Update robot_tests_provider.py (replace path to robot.css)
