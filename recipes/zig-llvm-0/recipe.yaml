@@ -2,7 +2,7 @@ schema_version: 1
 
 context:
   build_number: 0
-  name: zig-llvm
+  name: zig-llvm-0
   version: 20.1.8
 
   library: ${{ "Library/" if not unix }}
@@ -61,7 +61,7 @@ build:
     env:
       LLVM_TRIPLET: ${{ llvm_triplet }}
       ZIG_TRIPLET: ${{ zig_triplet }}
-      ZIG_LLVM_SKIP_BUILD: 1
+      # ZIG_LLVM_SKIP_BUILD: 1
       
       # --- BOOTSTRAPPING ---
       CONDA_BUILD_ZIG: >-
@@ -73,6 +73,10 @@ build:
           "x86_64-w64-windows-gnu"                 if not unix                        else
           "unknown"
         }}-zig
+
+  # --- DEBUG ---
+  script: not win and x86_64
+  # --- DEBUG ---
 
 requirements:
   build:
